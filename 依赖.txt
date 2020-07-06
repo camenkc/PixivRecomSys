@@ -3,3 +3,4 @@ flask_moment
 scrapy
 fake_useragent
 requests
+beautifulsoup
