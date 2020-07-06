@@ -26,7 +26,6 @@ def index():
 def time():
     return render_template('user/time.html')
 
-    
 if __name__=='__main__':
     app.run(port = 19990, debug = True)
 
