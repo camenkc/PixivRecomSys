@@ -9,7 +9,7 @@ from scrapy import signals
 from itemadapter import is_item, ItemAdapter
 
 
-class MyscrapySpiderMiddleware:
+class MyscrapyprojectSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
@@ -56,7 +56,7 @@ class MyscrapySpiderMiddleware:
         spider.logger.info('Spider opened: %s' % spider.name)
 
 
-class MyscrapyDownloaderMiddleware:
+class MyscrapyprojectDownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
@@ -101,3 +101,18 @@ class MyscrapyDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+        
+from fake_useragent import UserAgent # 用于随机生成一个user_agent
+class RandomUserAgentMiddleware(object):
+    # 随机更换 user_agent
+    def __init__(self,srawler):
+        super(RandomUserAgentMiddleware,self).__init__()
+        self.ua = UserAgent()
+    @classmethod
+    def from_crawler(cls,crawler):
+        return cls(crawler)
+
+    def process_request(self,request,spider):
+        def get_ua():
+            request.headers.setdefault('User-Agent',self.ua.random)
+
