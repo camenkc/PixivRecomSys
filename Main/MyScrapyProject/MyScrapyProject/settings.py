@@ -48,11 +48,14 @@ ROBOTSTXT_OBEY = True
 #    'MyScrapyProject.middlewares.MyscrapyprojectSpiderMiddleware': 543,
 #}
 
+#USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'MyScrapyProject.middlewares.MyscrapyprojectDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+#    #'MyScrapyProject.middlewares.MyscrapyprojectDownloaderMiddleware': 543,
+    'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
+    'MyScrapyProject.middlewares.RandomUserAgentMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
