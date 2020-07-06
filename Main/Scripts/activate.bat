@@ -1,6 +1,6 @@
 @echo off
 
-set "VIRTUAL_ENV=F:\GIThubRepository\PixivRecomSys"
+set "VIRTUAL_ENV=F:\GIThubRepository\PixivRecomSys\Main"
 
 if defined _OLD_VIRTUAL_PROMPT (
     set "PROMPT=%_OLD_VIRTUAL_PROMPT%"

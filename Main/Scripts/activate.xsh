@@ -28,7 +28,7 @@ def _deactivate(args):
 _deactivate(["nondestructive"])
 aliases["deactivate"] = _deactivate
 
-$VIRTUAL_ENV = r"F:\GIThubRepository\PixivRecomSys"
+$VIRTUAL_ENV = r"F:\GIThubRepository\PixivRecomSys\Main"
 
 $_OLD_VIRTUAL_PATH = $PATH
 $PATH = $PATH[:]
