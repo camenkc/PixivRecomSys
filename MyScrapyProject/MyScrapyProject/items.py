@@ -5,8 +5,14 @@
 
 import scrapy
 
+# 这里所有的UserId 都是我们这个系统的Id 不是p站账户Id
 
-class MyscrapyprojectItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+
+class UserStarPicItem(scrapy.Item):
+    UserId = scrapy.Field()
+    PicId = scrapy.Field()
+    
+    
+class UserStarArtist(scrapy.Item):
+    UserId = scrapy.Field()
+    AritstId = scrapy.Field()
