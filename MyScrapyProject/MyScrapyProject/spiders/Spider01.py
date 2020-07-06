@@ -10,7 +10,7 @@ class Myscrapy01Spider(scrapy.Spider):
     ]
     start_urls = [
         'https://www.pixiv.net/',
-        'https://www.pixiv.net/users/45273568/bookmarks/artworks'
+        #'https://www.pixiv.net/users/45273568/bookmarks/artworks'
     ]
 
     def parse(self, response):
