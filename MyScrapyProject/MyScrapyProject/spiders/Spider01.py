@@ -26,10 +26,6 @@ class ScrapyForUserStarClass(scrapy.Spider):
     def parse(self, response):
         self.loadID()
         self.install_img()
-        #with requests.Session() as self.s:
-        #    print("******  start  ******")
-        #    self.login()
-        #    self.mainProcess()
     
     def loadID(self):
         with open('ID.json','r',encoding='utf-8') as f:
@@ -102,7 +98,6 @@ class ScrapyForUserStarClass(scrapy.Spider):
                     print(self.RemID)
                     print(img_item_data['id'])
                     
-                    
 
     def install_img(self):
         head = {
@@ -128,13 +123,66 @@ class ScrapyForPicTagsClass(scrapy.Spider):
     ]
     
     def parse(self, response):
-        self.loadID()
-        self.install_img()
+        self.loadPicsID()
+        self.getPicTags()
         #with requests.Session() as self.s:
         #    print("******  start  ******")
         #    self.login()
         #    self.mainProcess()
     
+    def loadPicsID(self):
+        with open('PicsId.json') as f:
+            s=f.read()
+            self.PicList=json.loads(s)
+    
+    def getPicTags(self):
+        self.session=self.get_session()
+        for PicID in self.PicList:
+            url='https://www.pixiv.net/artworks/'+str(PicID)
+            print(url)
+            PageData=self.session.get(url,timeout = 20,verify = False)
+            print(PageData.text)
+            soup=BeautifulSoup(PageData.text)
+            
+            tagHtmlList=soup.head.find_all('meta')[-1]
+            
+            contentWithTag=json.loads(tagHtmlList['content'])
+            
+            illusetWithTag=contentWithTag['illust'][str(PicID)]['tags']['tags']
+            
+            item=PicTagsItem()
+            for value in illusetWithTag:
+                print(value)
+            
+    def cookies_load(self):
+        cookies_json = {}
+        try:
+            cookies = json.load(open('cookies.json','r',encoding = 'utf-8'))  #使用load方法将文件中的json格式的资料读取出来
+        except:
+            print('cookies读取失败')
+        else:
+            for cook in cookies:
+                if cook['domain'] == '.pixiv.net':
+                    cookies_json[cook['name']] = cook['value']
+            return cookies_json
+        
+        
+        
+    def get_session(self):
+        self.head = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400',
+        'Accept-Language': 'zh-CN,zh;q=0.9',
+        'Accept-Encoding': '',
+        'Referer': 'https://www.pixiv.net/',
+        }
+
+        self.cookies_json = self.cookies_load()       #若是从请求头中获取cookie的，就不用使用cookies_load方法
+
+        session = requests.session()
+        session.headers = self.head
+        requests.utils.add_dict_to_cookiejar(session.cookies,self.cookies_json)
+
+        return session    
 
     
         
