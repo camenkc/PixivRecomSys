@@ -3,35 +3,8 @@
 	<head>
 		<meta charset="utf-8"> 
 		<title>Welcome to PIXIVRemSys</title>
-		<h1>注册界面</h1>
-		<style>
-			input[type=text], select {
-			  width: 100%;
-			  padding: 12px 20px;
-			  margin: 8px 0;
-			  display: inline-block;
-			  border: 1px solid #ccc;
-			  border-radius: 4px;
-			  box-sizing: border-box;
-			}
-			
-			input[type=button] {
-			  width: 100%;
-			  background-color: #4CAF50;
-			  color: white;
-			  padding: 14px 20px;
-			  margin: 8px 0;
-			  border: none;
-			  border-radius: 4px;
-			  cursor: pointer;
-			}
-			
-			div {
-			  border-radius: 5px;
-			  background-color: #f2f2f2;
-			  padding: 20px;
-			}
-        </style>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+		
         <script type="text/javascript">
 			function register() {
 				var username = document.getElementById("username").value;
@@ -53,6 +26,7 @@
 				}else{
                     alert("注册成功！");
                     clear_text();
+					window.location.href = '/index';
                 }
                 
             function clear_text(){
@@ -67,24 +41,25 @@
 	</head>
 
 	<body>
-		<div class="header"></div>
-
-			<form name="registerForm">
-				<label for="username">账户名</label>
+		
+        <div class="wrap">
+			<div class="container">
+		
+			 <h1 style="color: white; margin: 0; text-align: center">Sign Up</h1>    
 				<input type="text" id="username" name="username" placeholder="Your username">
-				<label for="password">密码</label>
-                <input type="text" id="password" name="password" placeholder="Your password">
-                <label for="repeat_pwd">重复密码</label>
-				<input type="text" id="repeat_pwd" name="repeat_pwd" placeholder="Repeat your password">
-                <label for="pixiv_name">pixiv账户</label>
-				<input type="text" id="pixiv_name" name="pixiv_name" placeholder="Your pixiv name">
-				<label for="pixiv_pwd">pixiv密码</label>
-                <input type="text" id="pixiv_pwd" name="pixiv_pwd" placeholder="Your pixiv password">
-                <input type="button" class = "button" value="注册" onclick = "register()">
-			</form>
 			
-        </div>
-        
+				<input type="password" id="password" name="password" placeholder="Your password">
+				
+				<input type="password" id="repeat_pwd" name="repeat_pwd" placeholder="Repeat your password">
+				
+				<input type="text" id="pixiv_name" name="pixiv_name" placeholder="Your pixiv name">
+				
+				<input type="password" id="pixiv_pwd" name="pixiv_pwd" placeholder="Your pixiv pwd">
+
+				<input type="button" class = "button" value="注册" onclick = "register()">
+				
+		    </div>
+	    </div>
 	</body>
 
 </html>
