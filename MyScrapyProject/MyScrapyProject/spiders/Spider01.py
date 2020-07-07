@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 from MyScrapyProject.items import UserStarItem
+from MyScrapyProject.items import PicTagsItem
 
 #完成了登录后可以爬取pixiv收藏页面的功能
 #现在写具体图片的Id
@@ -109,8 +110,9 @@ class ScrapyForUserStarClass(scrapy.Spider):
         
         session = self.get_session()
         img_url_list = self.get_img_url()
-        
-
+     
+###############################################################     
+#根据图片Id爬取tags的代码也已经完成 pipeline准备完毕之即可取消yield注释
 class ScrapyForPicTagsClass(scrapy.Spider):
     name = 'ScrapyForPicTags'
     allowed_domains = [
@@ -137,11 +139,12 @@ class ScrapyForPicTagsClass(scrapy.Spider):
     
     def getPicTags(self):
         self.session=self.get_session()
+        item=PicTagsItem()
         for PicID in self.PicList:
             url='https://www.pixiv.net/artworks/'+str(PicID)
-            print(url)
+            #print(url)
             PageData=self.session.get(url,timeout = 20,verify = False)
-            print(PageData.text)
+            #print(PageData.text)
             soup=BeautifulSoup(PageData.text)
             
             tagHtmlList=soup.head.find_all('meta')[-1]
@@ -150,9 +153,20 @@ class ScrapyForPicTagsClass(scrapy.Spider):
             
             illusetWithTag=contentWithTag['illust'][str(PicID)]['tags']['tags']
             
-            item=PicTagsItem()
+            tagList=[]
             for value in illusetWithTag:
-                print(value)
+                #print(value)
+                tagList.append(value['tag'])
+                trans=value.get('translation')
+                if isinstance(trans,dict):
+                    tagList.append(trans['en'])
+                
+            for tmp in tagList:
+                print(tmp)
+            s=json.dumps(tagList)
+            item['PicTureID']=PicID
+            item['Tags']=s
+            #yield item
             
     def cookies_load(self):
         cookies_json = {}
