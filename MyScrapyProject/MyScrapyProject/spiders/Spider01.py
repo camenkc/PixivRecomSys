@@ -12,8 +12,8 @@ from MyScrapyProject.items import UserStarItem
 #现在写具体图片的Id
 
 
-class Myscrapy01Spider(scrapy.Spider):
-    name = 'MyScrapy01'
+class ScrapyForUserStarClass(scrapy.Spider):
+    name = 'ScrapyForUserStar'
     allowed_domains = [
         'quotes.toscrape.com',
         'pixiv.net'
@@ -104,9 +104,6 @@ class Myscrapy01Spider(scrapy.Spider):
                     
                     
 
-     
-
-    
     def install_img(self):
         head = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400',
@@ -119,7 +116,25 @@ class Myscrapy01Spider(scrapy.Spider):
         img_url_list = self.get_img_url()
         
 
+class ScrapyForPicTagsClass(scrapy.Spider):
+    name = 'ScrapyForPicTags'
+    allowed_domains = [
+        'quotes.toscrape.com',
+        'pixiv.net'
+    ]
+    start_urls = [
+        'https://www.pixiv.net/',
+        #'https://www.pixiv.net/users/45273568/bookmarks/artworks'
+    ]
+    
+    def parse(self, response):
+        self.loadID()
+        self.install_img()
+        #with requests.Session() as self.s:
+        #    print("******  start  ******")
+        #    self.login()
+        #    self.mainProcess()
+    
 
     
-        
         

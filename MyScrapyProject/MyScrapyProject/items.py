@@ -12,5 +12,14 @@ class MyscrapyprojectItem(scrapy.Item):
     pass
 
 class UserStarItem(scrapy.Item):
-    RemID=scrapy.Field()
-    PicTureID=scrapy.Field()
+    RemID=scrapy.Field()#主键
+    PicTureID=scrapy.Field()#从键
+    
+class PicTagsItem(scrapy.Item):
+    PicTureID=scrapy.Field()#主键
+    Tags=scrapy.Field()  #以一个字符串list构成的json字符串
+    
+
+
+
+    
