@@ -1,7 +1,17 @@
 import scrapy
 import requests
+import json
+import os
 import re
 from bs4 import BeautifulSoup
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+from MyScrapyProject.items import UserStarItem
+
+#完成了登录后可以爬取pixiv收藏页面的功能
+#现在写具体图片的Id
+
+
 class Myscrapy01Spider(scrapy.Spider):
     name = 'MyScrapy01'
     allowed_domains = [
@@ -12,144 +22,104 @@ class Myscrapy01Spider(scrapy.Spider):
         'https://www.pixiv.net/',
         #'https://www.pixiv.net/users/45273568/bookmarks/artworks'
     ]
-
+    
     def parse(self, response):
-        with requests.Session() as self.s:
-            print("******  start  ******")
-            self.login()
-            self.mainProcess()
-        
-        
-    def login(self):
-        print("正在请求登录页面...")
-        login_page_url = "https://accounts.pixiv.net/login"
-        login_html = self.s.get(login_page_url)
-        print("正在解析")
-        post_key = self.get_post_key(login_html.text)
-
-        login_url = "https://accounts.pixiv.net/login"
-        pixiv_id, password = ('CakeBaker.0308@gmail.com','12138ckC')#get_account()
-        login_data = self.s.post(url=login_url, data={
-            "pixiv_id": pixiv_id,
-            "password": password,
-            "captcha": "",
-            "g_recaptcha_response": "",
-            "post_key": post_key,
-            "source": "accounts",
-            "ref": "",
-            "return_to": "http://www.pixiv.net/"
-        })
-        print (login_data.text)
-    def get_post_key(self,login_html):
-        reg = r'name="post_key" value="(.*?)"'
-        key_re = re.compile(reg)
-        key_list = re.findall(key_re, login_html)
-        if len(key_list) == 1:
-            return key_list[0]
-        else:
-            raise Exception("post key can not found")
+        self.loadID()
+        self.install_img()
+        #with requests.Session() as self.s:
+        #    print("******  start  ******")
+        #    self.login()
+        #    self.mainProcess()
     
-    def get_account():
-    #"""
-    #config example:{"password": "123", "pixiv_id": "123@qq.com"}
-    #:return:
-    #"""
+    def loadID(self):
+        with open('ID.json','r',encoding='utf-8') as f:
+            s=f.read()
+            tmp=json.loads(s)
+            self.RemID=tmp['RemID']
+            self.PixID=tmp['PixID']
+        print(self.RemID)
+        print(self.PixID)
+    
+    def cookies_load(self):
+        cookies_json = {}
         try:
-            file = open('config', 'r')
-            str_data = file.read()
-            file.close()
-            data = json.loads(str_data)
-            return data['pixiv_id'], data['password']
-        except IOError:
-            raise Exception("user config error")
-    
-    def mainProcess(self):
-        self.get_user_bookmark(45273568)
-        pass
-    
-    
-    def get_user_bookmark(self,user_id):
-    #"""
-    #获取用户收藏的作品，并根据收藏作品的创作者id加入user_id(需要判断是否已经在user_ids里)末尾
-    #:param user_id:
-    #:return:
-    #"""
-        print("****** 开始获取用户（%d）的收藏作品 ******" % user_id)
-
-        i = 1
-        count = 0
-        while True:
-            try:
-                print('尝试下载用户页面')
-                url_tmp_s="https://www.pixiv.net/users/"+str(user_id)+"/bookmarks/artworks"
-                print(url_tmp_s)
-                res = self.s.get(url_tmp_s)
-                print(res.text)
-                print('尝试使用BF4')
-                soup = BeautifulSoup(res.text, "html.parser")
-                all_img = soup.find_all('img', class_="ui-scroll-view")
-            except self.e:
-                print(self.e)
-            
-        # 如果未找到，则说明已到最大页数
-            if not all_img:
-                break
-
-        # 查找收藏图片的作者id
-            all_a = soup.find_all('a', class_="ui-profile-popup")
-            for a in all_a:
-                c_user_id = a['data-user_id']
-                add_glob_user_ids(c_user_id)
-
-            print("用户（%d）收藏，已存：%d，新增：%d" % (user_id, count, len(all_img)))
-            for img in all_img:
-                target_url = img['data-src']
-                try:
-                    if not download("bookmarks", target_url):
-                        console("ERROR:" + " bookmarks " + target_url)
-                        save_error(user_id, target_url)
-                except IndexError as e:
-                    print (e)
-                    print(target_url)
-
-            count += len(all_img)
-            i += 1
-    
-    
-    
-    
-    
-    
-    
-    def main(self):
-        global user_ids, index
-        user_ids, index, work_or_mark = _get_ckpt()
-
-        if not user_ids:
-            console("start get user ids")
-            user_ids = _get_user_ids()
+            cookies = json.load(open('cookies.json','r',encoding = 'utf-8'))  #使用load方法将文件中的json格式的资料读取出来
+        except:
+            print('cookies读取失败')
         else:
-            console("read from ckpt. users count: %d, index: %d" % (len(user_ids), index))
+            for cook in cookies:
+                if cook['domain'] == '.pixiv.net':
+                    cookies_json[cook['name']] = cook['value']
+            return cookies_json
+        
+        
+        
+    def get_session(self):
+        self.head = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400',
+        'Accept-Language': 'zh-CN,zh;q=0.9',
+        'Accept-Encoding': '',
+        'Referer': 'https://www.pixiv.net/',
+        }
 
-        console("开始遍历 user。 start index : " + str(index))
+        self.cookies_json = self.cookies_load()       #若是从请求头中获取cookie的，就不用使用cookies_load方法
 
-        first = True
-        while index < len(user_ids):
-            if not (first and work_or_mark):
-                console("从用户的作品开始")
-                _save_ckpt(0)
-                # 抓取该用户的作品
-                get_user_work(user_ids[index])
+        session = requests.session()
+        session.headers = self.head
+        requests.utils.add_dict_to_cookiejar(session.cookies,self.cookies_json)
+
+        return session    
+        
+    def get_collection(self,page):
+        session = self.get_session()
+        collection_url = 'https://www.pixiv.net/ajax/user/{}/illusts/bookmarks?tag=&offset={}&limit=48&rest=show'.format(self.PixID,page*48) #将id改为你的账户uid
+        print(collection_url)
+        try:
+            collection_data = session.get(collection_url,timeout = 20,verify = False).json()
+        except:
+            print('收藏夹第{}页获取失败'.format(page+1))
+            return False
+        else:
+            print('请求第{}页成功'.format(page+1))
+            return collection_data
+        
+    
+    def get_img_url(self):
+        img_url_list = []
+        session = self.get_session()
+        for page in range(1):
+            collection_data = self.get_collection(page)
+            if collection_data == False:
+                pass
             else:
-                console("从用户收藏的作品开始")
+                total = collection_data['body']['total']
+                works = collection_data['body']['works']
+                item = UserStarItem()
+                for img_item_data in works:
+                    item['RemID']=self.RemID
+                    item['PicTureID']=img_item_data['id']
+                    #yield item
+                    print(self.RemID)
+                    print(img_item_data['id'])
+                    
+                    
 
-            _save_ckpt(1)
-            # 抓取该用户收藏的作品
-            get_user_bookmark(user_ids[index])
+     
 
-            first = False
-            index += 1
+    
+    def install_img(self):
+        head = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400',
+        'Accept-Language': 'zh-CN,zh;q=0.9',
+        'Accept-Encoding': '',
+        'Referer': 'https://www.pixiv.net/',
+        }
+        
+        session = self.get_session()
+        img_url_list = self.get_img_url()
+        
 
-        console("全部抓取完成，用户总数：" + str(len(user_ids)))
+
+    
         
         
