@@ -8,7 +8,8 @@
 from MyScrapyProject.MysqlRW import SQLOS
 from itemadapter import ItemAdapter
 import pymysql.cursors
-
+from MyScrapyProject.MysqlRW import SQLOS
+import datetime
 class MyscrapyprojectPipeline:
     def process_item(self, item, spider):
         return item
@@ -23,8 +24,9 @@ class AddToUserStarImagePPL:
         try:
             with self.connect.cursor() as cursor:
                 sqlwrite="INSERT INTO `d_user_star_image`(`userid`,`imageid`,`add_date`)VALUES(%s,%s,%s)"
-                cursor.execute(sqlwrite,(item.get("UserID"),item.get("ImageID"),item.get("Add_date","")))
+                cursor.execute(sqlwrite,(item.get("UserID"),item.get("ImageID"),datetime.datetime.today()))
                 cursor.connection.commit()
+                SQLOS.WritetoLog(item.get("UserID"),4,("添加收藏: %s"%item.get("ImageID")))
         
         except Exception as e:
             print(e)

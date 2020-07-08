@@ -1,4 +1,4 @@
-import socks
+#import socks
 import requests
 import json
 import os

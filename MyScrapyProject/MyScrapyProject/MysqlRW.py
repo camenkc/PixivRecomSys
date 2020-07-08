@@ -1,7 +1,10 @@
 from MyScrapyProject.items import UserAccount
 from itemadapter import ItemAdapter
+
 import pymysql.cursors
 
+import datetime
+from MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
 
 
@@ -34,6 +37,22 @@ class SQLOS():
                         cursorclass=pymysql.cursors.DictCursor)
         return connection
 
+    def AddUserStarImage(Userid,Imageid):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        if cursor.execute("SELECT * from d_user_star_image WHERE `userid`=%s",Userid):
+            if cursor.execute("SELECT * from d_user_star_image WHERE `imageid`=%s",Imageid):
+                return -1
+        try:
+            cursor.execute("INSERT INTO d_user_star_image (`userid`,`imageid`,`add_date`) VALUES (%s,%s,%s)",(Userid,Imageid,datetime.datetime.today()))
+            db.commit()
+            db.close()
+            return 1
+        except:
+            db.rollback()
+            db.close()
+            return 0#尝试向用户收藏内写入一条记录，如果已有则返回-1，写入失败返回0，成功返回1
+      
     def AddUserAccount(UserAccount):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -57,9 +76,8 @@ class SQLOS():
             print(444)
             db.rollback()
             db.close()
-            return 0
+            return 0  #参数为UserAccount 向表中添加一个对象，如果成功返回1，并向日志中写一条注册成功日志。失败返回0
             
-        #参数为UserAccount 向表中添加一个对象，如果成功返回1，并向日志中写一条注册成功日志。失败返回0
     def EditUserAccount(ID,UserAccount):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -87,6 +105,7 @@ class SQLOS():
             return StarImage
         else:
             return -1#得到指定ID的收藏图片列表，返回一个list
+
     def GetUserStarArtist(ID):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -98,6 +117,7 @@ class SQLOS():
             return Artist
         else:
             return -1#得到指定ID的关注用户列表，返回一个list
+
     def GetUserTagDic(ID):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -109,6 +129,7 @@ class SQLOS():
             return TagDict
         else:
             return -1#得到指定ID的Tag分析列表，返回一个dict
+
     def GetTaglist():
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -153,3 +174,9 @@ class SQLOS():
         User['Usermode']=not User['Usermode']
         SQLOS.EditUserAccount(ID,User) #更改用户模式
         SQLOS.WritetoLog(ID,2,("修改账户类型为 %s"% (not User['Usermode'])))#更改账户类型，并向日志中写入一条记录
+    
+
+          
+   
+
+
