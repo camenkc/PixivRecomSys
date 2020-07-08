@@ -1,4 +1,5 @@
 import scrapy
+import socks
 import requests
 import json
 import os
@@ -9,11 +10,12 @@ from datetime import datetime
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 from MyScrapyProject.items import UserStarImage
-#from MyScrapyProject.items import PicTagsItem
 
 #完成了登录后可以爬取pixiv收藏页面的功能
 #现在写具体图片的Id
-
+#已完成 在PixivRecomSys\MyScrapyProject\MyScrapyProject\spiders目录中调用scrapy crawl ScrapyForUserStar
+#即可加载我的P站登录cookies （cookies.json）和需要爬取的账号 （ID.json）
+#全部爬取到服务器中
 
 class ScrapyForUserStarClass(scrapy.Spider):
     name = 'ScrapyForUserStar'
@@ -21,24 +23,28 @@ class ScrapyForUserStarClass(scrapy.Spider):
         'quotes.toscrape.com',
         'pixiv.net'
     ]
+    
     custom_settings={
         'ITEM_PIPELINES':{'MyScrapyProject.pipelines.AddToUserStarImagePPL':300}
     }
     start_urls = [
-        'https://www.pixiv.net/',
+        'http://quotes.toscrape.com/',
         #'https://www.pixiv.net/users/45273568/bookmarks/artworks'
     ]
     
     def parse(self, response):
         self.loadID()
         self.isEnd=False
+        self.my_proxies={"http":"http://127.0.0.1:1080","https":"https://127.0.0.1:1080"}
         self.item = UserStarImage()
-        yield self.install_img()
         g=self.get_img_url()
         while self.isEnd==False:
-            tmp = next(g)
-            if (tmp['UserID']!=0):
-                yield tmp
+            try:
+                tmp = next(g)
+                if (tmp['UserID']!=0):
+                    yield tmp
+            except:
+                pass
     
     def loadID(self):
         with open('ID.json','r',encoding='utf-8') as f:
@@ -85,8 +91,10 @@ class ScrapyForUserStarClass(scrapy.Spider):
         collection_url = 'https://www.pixiv.net/ajax/user/{}/illusts/bookmarks?tag=&offset={}&limit=48&rest=show'.format(self.PixID,page*48) #将id改为你的账户uid
         print(collection_url)
         try:
-            collection_data = session.get(collection_url,timeout = 20,verify = False).json()
-        except:
+            #session.proxies={"http":"http://127.0.0.1:1080","https":"https://127.0.0.1:1080"}
+            collection_data = session.get(collection_url,timeout = 20,verify = False,proxies=self.my_proxies).json()
+        except Exception as e:
+            print(e)
             print('收藏夹第{}页获取失败'.format(page+1))
             return False
         else:
@@ -120,11 +128,6 @@ class ScrapyForUserStarClass(scrapy.Spider):
                     #print(type(img_item_data['id']))
                     
 
-    def install_img(self):
-        session = self.get_session()
-        print('getting img IDs')
-    
-        return self.get_img_url()
      
 ###############################################################     
 #根据图片Id爬取tags的代码也已经完成 pipeline准备完毕之即可取消yield注释

@@ -19,14 +19,18 @@ class AddToUserStarImagePPL:
     def open_spider(self,spider):
         self.connect=SQLOS.Connect_to_DB()
     def process_item(self,item,spider):
+        print('Process Item now')
         try:
             with self.connect.cursor() as cursor:
-                sqlwrite="INSERT INTO `d_user_star_image`(`userid`,`imageid`,`add_date`)VALUES(%d,%d,%s)"
-                cursor.execute(sqlwrite,(item.get("UserID",""),item.get("ImageID",""),item.get("Add_date","")))
+                sqlwrite="INSERT INTO `d_user_star_image`(`userid`,`imageid`,`add_date`)VALUES(%s,%s,%s)"
+                print(type(item.get("UserID")))
+                print(type(item.get("ImageID")))
+                print(type(item.get("Add_date")))
+                cursor.execute(sqlwrite,(item.get("UserID"),item.get("ImageID"),item.get("Add_date","")))
                 cursor.connection.commit()
         
         except Exception as e:
-             pass
+            print(e)
         return item
     def close_spider(self,spider):
         self.connect.close()
