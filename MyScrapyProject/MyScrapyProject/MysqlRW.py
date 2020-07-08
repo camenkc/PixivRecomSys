@@ -1,10 +1,10 @@
-from MyScrapyProject.items import UserAccount
+from items import UserAccount
 from itemadapter import ItemAdapter
 
 import pymysql.cursors
 
 import datetime
-from MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
+from spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
 
 class MYF():
@@ -34,13 +34,12 @@ class MYF():
             lastmaxnum-=-1
         return newdict #输入原tag的dict和需要补充进去tag的list，返回新生成的tagdict
     def AddUserTag(userdict,taglist,tagdict):
-        newdict={}
         for tag in taglist:
             if(userdict.__contains__(tagdict[tag])):
-                newdict[tagdict[tag]]=userdict[tagdict[tag]]+1
+                userdict[tagdict[tag]]-=-1
             else:
-                newdict[tagdict[tag]]=1
-        return newdict#输入用户tagdict,需要添加的taglist，和完整的tagdict
+                userdict[tagdict[tag]]=1
+        return userdict#输入用户tagdict,需要添加的taglist，和完整的tagdict
 
 
 
@@ -112,6 +111,7 @@ class SQLOS():
         cursor=db.cursor()
         try:
             for tagid,tagcount in userdict.items():
+                print(tagid)
                 if(cursor.execute("SELECT * FROM d_user_tag WHERE`userid`=%s AND `tagid`=%s",(userid,tagid))):
                     if tagcount==0:
                         cursor.execute("DELETE FROM d_user_tag WHERE `userid`=%s AND `tagid`=%s",(userid,tagid))#删除count为零的记录
@@ -134,27 +134,27 @@ class SQLOS():
             return -1#数据库已有收藏的话 略过
         else:
             UserTag=SQLOS.GetUserTagDic(Userid) #从数据库拖数据下来
-            #print(111)
+    #        print(111)
             TagDict=SQLOS.GetTagDict() #从数据库拖dict下来
-            #print(222)
+     #       print(222)
 
             spider=ScrapyForPicTagsClass()
             pictag=spider.GetTagList(Imageid) #爬取图片tag
-#            print(333)
+    #        print(333)
             addtaglist=MYF.DictDif1(TagDict,pictag)#有哪些tag是没有的 组成一个list
- #           print(444)
+    #        print(444)
             newdict=MYF.FullfillTag(TagDict,addtaglist)#更新本地tagdict为完整的tag（dict形式
-  #          print(555)
+    #        print(555)
             updatedict=MYF.DictDif2(TagDict,newdict) #需要补充进taglist的tag（dict形式）
-   #         print(666)
-    #        print(UserTag)
-            newusertag=MYF.AddUserTag(UserTag,pictag,newdict)#更新本地用户的tagdict
+    #        print(666)
+            print(UserTag)
+            MYF.AddUserTag(UserTag,pictag,newdict)#更新本地用户的tagdict
      #       print(777)
             SQLOS.UpdateOneStarImage(Userid,Imageid) #更新数据库用户收藏列表
       #      print(888)
             SQLOS.UpdateTaglist(updatedict) #更新数据库Tag列表
        #     print(999)
-            SQLOS.UpdateUsertag(Userid,newusertag) #更新数据库用户tag分析列表
+            SQLOS.UpdateUsertag(Userid,UserTag) #更新数据库用户tag分析列表
             SQLOS.WritetoLog(Userid,4,("添加收藏: %s"%Imageid))
 
             return 1 #向数据库中添加一条收藏记录，并更新tag_list与user_tag
