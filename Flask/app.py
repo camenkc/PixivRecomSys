@@ -26,7 +26,7 @@ def get_conn():
 
 @app.route('/')
 def JumpToIndex():
-    return redirect('/index')
+    return redirect('/login')
 
 @app.route('/index')
 def index():
@@ -44,14 +44,29 @@ def index():
         '''
     return render_template('index.html')
 
-@app.route('/main')
+@app.route('/login')
 def login():
-    return render_template('main.html')
+    return render_template('login.html')
 
 @app.route('/register')
 def register():
     return render_template('register.html')
 
+@app.route('/status')
+def status():
+    return render_template('status.html')
+
+@app.route('/person')
+def person():
+    return render_template('person.html')
+    
+@app.route('/list')
+def list():
+    return render_template('list.html')
+
+@app.route('/recommend')
+def recommend():
+    return render_template('recommend.html')
 
 @app.route('/time')
 def time():
