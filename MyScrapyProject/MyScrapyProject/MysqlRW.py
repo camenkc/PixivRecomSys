@@ -1,4 +1,4 @@
-import items
+from items import UserAccount
 from itemadapter import ItemAdapter
 import pymysql.cursors
 
@@ -50,12 +50,23 @@ class SQLOS():
                 return 0
         else:
             return -1#更改制定ID的用户账户信息，成功返回1，失败返回0，未找到ID返回-1
-    def GetUserAccount(ID):
+    def GetUserAccount(ID):#得到制定ID的用户账户信息，成功返回账户信息，未找到ID返回-1
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
         UserAC=UserAccount()
         if cursor.execute("SELECT * from d_user_account WHERE `ID`=%s",ID):
-            print (cursor.execute("SELECT `Userpw` from d_user_account WHERE `ID`=%s",ID))
-
+            DataFromSQL=cursor.fetchall()
+            UserAC['ID']=DataFromSQL[0]['ID']
+            UserAC['PixivID']=DataFromSQL[0]['PixivID']
+            UserAC['Pixivpw']=DataFromSQL[0]['Pixivpw']
+            UserAC['Username']=DataFromSQL[0]['Username']
+            UserAC['Userpw']=DataFromSQL[0]['Userpw']
+            UserAC['Usermode']=DataFromSQL[0]['Usermode']
+            UserAC['Create_date']=DataFromSQL[0]['create_date']
+            UserAC['Lastlogindate']=DataFromSQL[0]['lastlogindate']
+            UserAC['Lastloginip']=DataFromSQL[0]['lastloginip']
+            UserAC['Logincount']=DataFromSQL[0]['logincount']
+            return UserAC
         else:
             return -1
+        db.close()
