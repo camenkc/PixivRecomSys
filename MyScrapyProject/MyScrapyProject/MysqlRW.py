@@ -75,6 +75,58 @@ class SQLOS():
                 return 0
         else:
             return -1#更改制定ID的用户账户信息，成功返回1，失败返回0，未找到ID返回-1
+    
+    def GetUserStarImage(ID):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        StarImage=[]
+        if cursor.execute("SELECT * from d_user_star_image WHERE `userid`=%s",ID):
+            DataFromSQL=cursor.fetchall()
+            for onedate in DataFromSQL:
+                StarImage.append(onedate['imageid'])
+            return StarImage
+        else:
+            return -1#得到指定ID的收藏图片列表，返回一个list
+    def GetUserStarArtist(ID):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        StarArtist=[]
+        if cursor.execute("SELECT * from d_user_star_artist WHERE `userid`=%s",ID):
+            DataFromSQL=cursor.fetchall()
+            for onedate in DataFromSQL:
+                StarImage.append(onedate['artistid'])
+            return Artist
+        else:
+            return -1#得到指定ID的关注用户列表，返回一个list
+    def GetUserTagDic(ID):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        TagDict={}
+        if cursor.execute("SELECT * from d_user_tag WHERE `userid`=%s",ID):
+            DataFromSQL=cursor.fetchall()
+            for onedate in DataFromSQL:
+                TagDict[onedate['tagid']]=onedate['count']
+            return TagDict
+        else:
+            return -1#得到指定ID的Tag分析列表，返回一个dict
+    def GetTaglist():
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        cursor.execute("SELECT * from d_tag_list")
+        DataFromSQL=cursor.fetchall()
+        TagDict={}
+        for onedate in DataFromSQL:
+            TagDict[onedate['TagID']]=onedate['TagName']
+        print(TagDict)
+        return TagDict#得到数据库储存Tag列表，返回一个dict
+
+    def ChangeUserPixiv(ID,pixivID,pixivpw):
+        User=SQLOS.GetUserAccount(ID)
+        User['PixivID']=pixivID
+        User['Pixivpw']=pixivpw
+        SQLOS.EditUserAccount(ID,User)
+        SQLOS.WritetoLog(ID,3,("修改绑定P站账号为 %s"%pixivID))#更改账户绑定p站账户，并向日志中写入一条记录
+    
     def GetUserAccount(ID):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -95,12 +147,9 @@ class SQLOS():
         else:
             return -1
         db.close()#得到制定ID的用户账户信息，成功返回账户信息，未找到ID返回-1
+
     def SwitchUserMode(ID):
         User=SQLOS.GetUserAccount(ID)
         User['Usermode']=not User['Usermode']
         SQLOS.EditUserAccount(ID,User) #更改用户模式
         SQLOS.WritetoLog(ID,2,("修改账户类型为 %s"% (not User['Usermode'])))#更改账户类型，并向日志中写入一条记录
-    
-
-
-
