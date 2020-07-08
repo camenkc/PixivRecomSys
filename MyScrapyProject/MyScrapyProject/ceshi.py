@@ -3,8 +3,10 @@ from items import UserAccount
 import datetime
 import pymysql
 import socket
-
-
+from spiders.PureSpiders import ScrapyForPicTagsClass
+spider=ScrapyForPicTagsClass()
+taglist=spider.GetTagList(79562473)
+print(taglist)
 item=UserAccount()
 item['PixivID']=777
 item['Pixivpw']="gaiguodemima"
@@ -16,5 +18,5 @@ item['Lastloginip']=socket.gethostbyname(socket.gethostname())
 item['Logincount']=3
 item['Usermode']=4
 
-SQLOS.GetUserAccount(6)
+print(SQLOS.GetUserAccount(6))
 

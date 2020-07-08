@@ -1,7 +1,10 @@
 from MyScrapyProject.items import UserAccount
 from itemadapter import ItemAdapter
+
 import pymysql.cursors
 
+import datetime
+from MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
 
 
@@ -34,6 +37,22 @@ class SQLOS():
                         cursorclass=pymysql.cursors.DictCursor)
         return connection
 
+    def AddUserStarImage(Userid,Imageid):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        if cursor.execute("SELECT * from d_user_star_image WHERE `userid`=%s",Userid):
+            if cursor.execute("SELECT * from d_user_star_image WHERE `imageid`=%s",Imageid):
+                return -1
+        try:
+            cursor.execute("INSERT INTO d_user_star_image (`userid`,`imageid`,`add_date`) VALUES (%s,%s,%s)",(Userid,Imageid,datetime.datetime.today()))
+            db.commit()
+            db.close()
+            return 1
+        except:
+            db.rollback()
+            db.close()
+            return 0#尝试向用户收藏内写入一条记录，如果已有则返回-1，写入失败返回0，成功返回1
+      
     def AddUserAccount(UserAccount):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -57,9 +76,8 @@ class SQLOS():
             print(444)
             db.rollback()
             db.close()
-            return 0
+            return 0  #参数为UserAccount 向表中添加一个对象，如果成功返回1，并向日志中写一条注册成功日志。失败返回0
             
-        #参数为UserAccount 向表中添加一个对象，如果成功返回1，并向日志中写一条注册成功日志。失败返回0
     def EditUserAccount(ID,UserAccount):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -75,6 +93,61 @@ class SQLOS():
                 return 0
         else:
             return -1#更改制定ID的用户账户信息，成功返回1，失败返回0，未找到ID返回-1
+    
+    def GetUserStarImage(ID):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        StarImage=[]
+        if cursor.execute("SELECT * from d_user_star_image WHERE `userid`=%s",ID):
+            DataFromSQL=cursor.fetchall()
+            for onedate in DataFromSQL:
+                StarImage.append(onedate['imageid'])
+            return StarImage
+        else:
+            return -1#得到指定ID的收藏图片列表，返回一个list
+
+    def GetUserStarArtist(ID):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        StarArtist=[]
+        if cursor.execute("SELECT * from d_user_star_artist WHERE `userid`=%s",ID):
+            DataFromSQL=cursor.fetchall()
+            for onedate in DataFromSQL:
+                StarImage.append(onedate['artistid'])
+            return Artist
+        else:
+            return -1#得到指定ID的关注用户列表，返回一个list
+
+    def GetUserTagDic(ID):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        TagDict={}
+        if cursor.execute("SELECT * from d_user_tag WHERE `userid`=%s",ID):
+            DataFromSQL=cursor.fetchall()
+            for onedate in DataFromSQL:
+                TagDict[onedate['tagid']]=onedate['count']
+            return TagDict
+        else:
+            return -1#得到指定ID的Tag分析列表，返回一个dict
+
+    def GetTaglist():
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        cursor.execute("SELECT * from d_tag_list")
+        DataFromSQL=cursor.fetchall()
+        TagDict={}
+        for onedate in DataFromSQL:
+            TagDict[onedate['TagID']]=onedate['TagName']
+        print(TagDict)
+        return TagDict#得到数据库储存Tag列表，返回一个dict
+
+    def ChangeUserPixiv(ID,pixivID,pixivpw):
+        User=SQLOS.GetUserAccount(ID)
+        User['PixivID']=pixivID
+        User['Pixivpw']=pixivpw
+        SQLOS.EditUserAccount(ID,User)
+        SQLOS.WritetoLog(ID,3,("修改绑定P站账号为 %s"%pixivID))#更改账户绑定p站账户，并向日志中写入一条记录
+    
     def GetUserAccount(ID):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -95,6 +168,7 @@ class SQLOS():
         else:
             return -1
         db.close()#得到制定ID的用户账户信息，成功返回账户信息，未找到ID返回-1
+
     def SwitchUserMode(ID):
         User=SQLOS.GetUserAccount(ID)
         User['Usermode']=not User['Usermode']
@@ -102,5 +176,7 @@ class SQLOS():
         SQLOS.WritetoLog(ID,2,("修改账户类型为 %s"% (not User['Usermode'])))#更改账户类型，并向日志中写入一条记录
     
 
+          
+   
 
 
