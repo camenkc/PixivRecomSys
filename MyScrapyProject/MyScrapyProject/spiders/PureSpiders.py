@@ -19,12 +19,14 @@ class ScrapyForPicTagsClass():
         self.session=self.get_session()
         
         url='https://www.pixiv.net/artworks/'+str(self.PicID)
-        
-        PageData=self.session.get(url,timeout = 20,verify = False,proxies=self.proxies)
-        soup=BeautifulSoup(PageData.text,features="lxml")
-        tagHtmlList=soup.head.find_all('meta')[-1]
-        contentWithTag=json.loads(tagHtmlList['content'])
-        illusetWithTag=contentWithTag['illust'][str(self.PicID)]['tags']['tags']
+        try:
+            PageData=self.session.get(url,timeout = 20,verify = False,proxies=self.proxies)
+            soup=BeautifulSoup(PageData.text,features="lxml")
+            tagHtmlList=soup.head.find_all('meta')[-1]
+            contentWithTag=json.loads(tagHtmlList['content'])
+            illusetWithTag=contentWithTag['illust'][str(self.PicID)]['tags']['tags']
+        except Exception as e:
+            print(e)
         tagList=[]
         for value in illusetWithTag:
             tagList.append(value['tag'])

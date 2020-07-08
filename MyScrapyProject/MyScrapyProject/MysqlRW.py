@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 from items import UserAccount
 from itemadapter import ItemAdapter
 
@@ -154,10 +156,8 @@ class SQLOS():
             spider=ScrapyForPicTagsClass()
             pictag=spider.GetTagList(Imageid) #爬取图片tag 
             SQLOS.UpdateOneStarImage(Userid,Imageid) #更新数据库用户收藏列表
-            
             SQLOS.UpdateUsertag(Userid,pictag) #更新数据库用户tag分析列表 传入UserID和他新收藏的这张图片的tags
             SQLOS.WritetoLog(Userid,4,("添加收藏: %s"%Imageid))
-
             return 1 #向数据库中添加一条收藏记录，并更新tag_list与user_tag
 
             
