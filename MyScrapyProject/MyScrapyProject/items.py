@@ -6,6 +6,7 @@
 import scrapy
 
 class UserAccount(scrapy.Item):
+ 
     ID=scrapy.Field()
     PixivID=scrapy.Field()
     Pixivpw=scrapy.Field()
