@@ -12,7 +12,7 @@ import pymysql.cursors
 class MyscrapyprojectPipeline:
     def process_item(self, item, spider):
         return item
-
+#已完成爬取收藏图片ID的所有代码 请勿改变
 class AddToUserStarImagePPL:
     def __init__(self):
         pass
@@ -23,9 +23,6 @@ class AddToUserStarImagePPL:
         try:
             with self.connect.cursor() as cursor:
                 sqlwrite="INSERT INTO `d_user_star_image`(`userid`,`imageid`,`add_date`)VALUES(%s,%s,%s)"
-                print(type(item.get("UserID")))
-                print(type(item.get("ImageID")))
-                print(type(item.get("Add_date")))
                 cursor.execute(sqlwrite,(item.get("UserID"),item.get("ImageID"),item.get("Add_date","")))
                 cursor.connection.commit()
         
@@ -35,9 +32,11 @@ class AddToUserStarImagePPL:
     def close_spider(self,spider):
         self.connect.close()
 
-
+#暂时不实现
 class AddToUserStarArtistPPL:
     def __init__(self):
+        pass
+    def open_spider(self,spider):
         self.connect=SQLOS.Connect_to_DB()
     def process_item(self,item,spider):
         try:

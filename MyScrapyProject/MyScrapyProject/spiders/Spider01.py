@@ -142,49 +142,34 @@ class ScrapyForPicTagsClass(scrapy.Spider):
         #'https://www.pixiv.net/users/45273568/bookmarks/artworks'
     ]
     
-    def parse(self, response):
-        self.loadPicsID()
+    def GetTagList(self, PicID):
+        #self.loadPicsID()
         self.getPicTags()
+        self.PicID=PicID
         #with requests.Session() as self.s:
         #    print("******  start  ******")
         #    self.login()
         #    self.mainProcess()
     
-    def loadPicsID(self):
-        with open('PicsId.json') as f:
-            s=f.read()
-            self.PicList=json.loads(s)
     
     def getPicTags(self):
         self.session=self.get_session()
-        item=PicTagsItem()
-        for PicID in self.PicList:
-            url='https://www.pixiv.net/artworks/'+str(PicID)
-            #print(url)
-            PageData=self.session.get(url,timeout = 20,verify = False)
-            #print(PageData.text)
-            soup=BeautifulSoup(PageData.text)
-            
-            tagHtmlList=soup.head.find_all('meta')[-1]
-            
-            contentWithTag=json.loads(tagHtmlList['content'])
-            
-            illusetWithTag=contentWithTag['illust'][str(PicID)]['tags']['tags']
-            
-            tagList=[]
-            for value in illusetWithTag:
-                #print(value)
-                tagList.append(value['tag'])
-                trans=value.get('translation')
-                if isinstance(trans,dict):
-                    tagList.append(trans['en'])
-                
-            for tmp in tagList:
-                print(tmp)
-            s=json.dumps(tagList)
-            item['PicTureID']=PicID
-            item['Tags']=s
-            #yield item
+        
+        url='https://www.pixiv.net/artworks/'+str(PicID)
+        PageData=self.session.get(url,timeout = 20,verify = False)
+        soup=BeautifulSoup(PageData.text)
+        tagHtmlList=soup.head.find_all('meta')[-1]
+        contentWithTag=json.loads(tagHtmlList['content'])
+        illusetWithTag=contentWithTag['illust'][str(PicID)]['tags']['tags']
+        tagList=[]
+        for value in illusetWithTag:
+            tagList.append(value['tag'])
+            trans=value.get('translation')
+            if isinstance(trans,dict):
+                tagList.append(trans['en'])
+        for tmp in tagList:
+            print(tmp)
+        return tagList
             
     def cookies_load(self):
         cookies_json = {}
