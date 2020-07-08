@@ -1,7 +1,4 @@
-import items
-from itemadapter import ItemAdapter
 import pymysql.cursors
-
 class SQLOS():
     def __init__(self):
         pass
@@ -16,46 +13,9 @@ class SQLOS():
                         charset='utf8mb4',
                         cursorclass=pymysql.cursors.DictCursor)
         return connection
-
-    def AddUserAccount(UserAccount):
-        db=SQLOS.Connect_to_DB()
-        cursor=db.cursor()
-        sql_write = "INSERT INTO d_user_account (`PixivID`,`Pixivpw`,`Username`,`Userpw`,`Usermode`,`create_date`,`lastlogindate`,`lastloginip`,`logincount`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-       
-        try:
     
-            cursor.execute(sql_write,(UserAccount.get("PixivID",""),UserAccount.get("Pixivpw",""),UserAccount.get("Username",""),UserAccount.get("Userpw",""),UserAccount.get("Usermode",""),UserAccount.get("Create_date",""),UserAccount.get("Lastlogindate",""),UserAccount.get("Lastloginip",""),UserAccount.get("Logincount","")))
-        
-      
-            db.commit()
-            return 1
-        except:
-        
-            db.rollback()
-            return 0
-         
-        db.close()#参数为UserAccount 向表中添加一个对象，如果成功返回1，失败返回0
-    def EditUserAccount(ID,UserAccount):
-        db=SQLOS.Connect_to_DB()
-        cursor=db.cursor()
-        if cursor.execute("SELECT * from d_user_account WHERE `ID`=%s",ID):
 
-             try:
-                cursor.execute("UPDATE d_user_account SET `PixivID`=%s,`Pixivpw`=%s,`Username`=%s,`Userpw`=%s,`Usermode`=%s,`lastlogindate`=%s,`lastloginip`=%s,`logincount`=%s WHERE ID=%s",(UserAccount.get("PixivID",""),UserAccount.get("Pixivpw",""),UserAccount.get("Username",""),UserAccount.get("Userpw",""),UserAccount.get("Usermode",""),UserAccount.get("Lastlogindate",""),UserAccount.get("Lastloginip",""),UserAccount.get("Logincount",""),ID))
-                db.commit()
-                return 1
-             except:
-                db.rollback()
-                print(333)
-                return 0
-        else:
-            return -1#更改制定ID的用户账户信息，成功返回1，失败返回0，未找到ID返回-1
-    def GetUserAccount(ID):
-        db=SQLOS.Connect_to_DB()
-        cursor=db.cursor()
-        UserAC=UserAccount()
-        if cursor.execute("SELECT * from d_user_account WHERE `ID`=%s",ID):
-            print (cursor.execute("SELECT `Userpw` from d_user_account WHERE `ID`=%s",ID))
 
-        else:
-            return -1
+  
+
+
