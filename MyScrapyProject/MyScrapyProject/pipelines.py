@@ -23,10 +23,14 @@ class AddToUserStarImagePPL:
         print('Process Item now')
         try:
             with self.connect.cursor() as cursor:
-                sqlwrite="INSERT INTO `d_user_star_image`(`userid`,`imageid`,`add_date`)VALUES(%s,%s,%s)"
-                cursor.execute(sqlwrite,(item.get("UserID"),item.get("ImageID"),datetime.datetime.today()))
+                if(SQLOS.CheckStarImage(item.get("UserID"),item.get("ImageID"))):
+                    pass
+                else:
+                    sqlwrite="INSERT INTO `d_user_star_image`(`userid`,`imageid`,`add_date`)VALUES(%s,%s,%s)"
+                    cursor.execute(sqlwrite,(item.get("UserID"),item.get("ImageID"),datetime.datetime.today()))
+                SQLOS.AddStarImage(item.get("UserID"),item.get("ImageID"))
                 cursor.connection.commit()
-                SQLOS.WritetoLog(item.get("UserID"),4,("添加收藏: %s"%item.get("ImageID")))
+               
         
         except Exception as e:
             print(e)
