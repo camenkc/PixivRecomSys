@@ -95,13 +95,15 @@ class ScrapyForUserStarClass(scrapy.Spider):
             else:
                 total = collection_data['body']['total']
                 works = collection_data['body']['works']
+                if len(works)==0 :
+                    break
                 item = UserStarImage()
                 for img_item_data in works:
                     item['UserID']=self.RemID
                     item['ImageID']=int(img_item_data['id'])
-                    #yield item
-                    print(type(self.RemID))
-                    print(type(img_item_data['id']))
+                    yield item
+                    #print(type(self.RemID))
+                    #print(type(img_item_data['id']))
                     
 
     def install_img(self):
