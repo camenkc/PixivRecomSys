@@ -6,5 +6,5 @@ pip install requests -i https://mirrors.aliyun.com/pypi/simple/
 pip install beautifulsoup4 -i https://mirrors.aliyun.com/pypi/simple/
 pip install lxml -i https://mirrors.aliyun.com/pypi/simple/
 pip install pymysql -i https://mirrors.aliyun.com/pypi/simple/
-
+pip install -U requests[socks] -i https://mirrors.aliyun.com/pypi/simple/
 pause
