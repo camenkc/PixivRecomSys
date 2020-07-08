@@ -6,8 +6,8 @@ import re
 from bs4 import BeautifulSoup
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-from MyScrapyProject.items import UserStarItem
-from MyScrapyProject.items import PicTagsItem
+from MyScrapyProject.items import UserStarImage
+#from MyScrapyProject.items import PicTagsItem
 
 #完成了登录后可以爬取pixiv收藏页面的功能
 #现在写具体图片的Id
@@ -19,6 +19,9 @@ class ScrapyForUserStarClass(scrapy.Spider):
         'quotes.toscrape.com',
         'pixiv.net'
     ]
+    custom_settings={
+        'ITEM_PIPELINES':{'MyScrapyProject.pipelines.AddToUserStarImagePPL':300}
+    }
     start_urls = [
         'https://www.pixiv.net/',
         #'https://www.pixiv.net/users/45273568/bookmarks/artworks'
@@ -36,6 +39,7 @@ class ScrapyForUserStarClass(scrapy.Spider):
             self.PixID=tmp['PixID']
         print(self.RemID)
         print(self.PixID)
+        
     
     def cookies_load(self):
         cookies_json = {}
@@ -84,20 +88,20 @@ class ScrapyForUserStarClass(scrapy.Spider):
     def get_img_url(self):
         img_url_list = []
         session = self.get_session()
-        for page in range(1):
+        for page in range(10):
             collection_data = self.get_collection(page)
             if collection_data == False:
                 pass
             else:
                 total = collection_data['body']['total']
                 works = collection_data['body']['works']
-                item = UserStarItem()
+                item = UserStarImage()
                 for img_item_data in works:
-                    item['RemID']=self.RemID
-                    item['PicTureID']=img_item_data['id']
+                    item['UserID']=self.RemID
+                    item['ImageID']=int(img_item_data['id'])
                     #yield item
-                    print(self.RemID)
-                    print(img_item_data['id'])
+                    print(type(self.RemID))
+                    print(type(img_item_data['id']))
                     
 
     def install_img(self):

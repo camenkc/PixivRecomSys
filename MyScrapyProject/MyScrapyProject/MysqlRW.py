@@ -1,4 +1,4 @@
-
+import pymysql.cursors
 class SQLOS():
     def __init__(self):
         pass
