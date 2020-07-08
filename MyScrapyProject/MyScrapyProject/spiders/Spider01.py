@@ -4,6 +4,8 @@ import json
 import os
 import re
 from bs4 import BeautifulSoup
+from datetime import timedelta
+from datetime import datetime
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 from MyScrapyProject.items import UserStarImage
@@ -29,7 +31,14 @@ class ScrapyForUserStarClass(scrapy.Spider):
     
     def parse(self, response):
         self.loadID()
-        self.install_img()
+        self.isEnd=False
+        self.item = UserStarImage()
+        yield self.install_img()
+        g=self.get_img_url()
+        while self.isEnd==False:
+            tmp = next(g)
+            if (tmp['UserID']!=0):
+                yield tmp
     
     def loadID(self):
         with open('ID.json','r',encoding='utf-8') as f:
@@ -62,10 +71,10 @@ class ScrapyForUserStarClass(scrapy.Spider):
         'Accept-Encoding': '',
         'Referer': 'https://www.pixiv.net/',
         }
-
         self.cookies_json = self.cookies_load()       #若是从请求头中获取cookie的，就不用使用cookies_load方法
-
+        
         session = requests.session()
+        
         session.headers = self.head
         requests.utils.add_dict_to_cookiejar(session.cookies,self.cookies_json)
 
@@ -86,9 +95,13 @@ class ScrapyForUserStarClass(scrapy.Spider):
         
     
     def get_img_url(self):
+        print('getting img IDs')
         img_url_list = []
         session = self.get_session()
-        for page in range(10):
+        
+        now =datetime.now()
+        self.item['Add_date']=now.strftime('%Y-%m-%d')
+        for page in range(100):
             collection_data = self.get_collection(page)
             if collection_data == False:
                 pass
@@ -96,26 +109,22 @@ class ScrapyForUserStarClass(scrapy.Spider):
                 total = collection_data['body']['total']
                 works = collection_data['body']['works']
                 if len(works)==0 :
+                    self.isEnd=True
+                    self.item['UserID']=0;
                     break
-                item = UserStarImage()
                 for img_item_data in works:
-                    item['UserID']=self.RemID
-                    item['ImageID']=int(img_item_data['id'])
-                    yield item
+                    self.item['UserID']=self.RemID
+                    self.item['ImageID']=int(img_item_data['id'])
+                    yield self.item
                     #print(type(self.RemID))
                     #print(type(img_item_data['id']))
                     
 
     def install_img(self):
-        head = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3741.400 QQBrowser/10.5.3863.400',
-        'Accept-Language': 'zh-CN,zh;q=0.9',
-        'Accept-Encoding': '',
-        'Referer': 'https://www.pixiv.net/',
-        }
-        
         session = self.get_session()
-        img_url_list = self.get_img_url()
+        print('getting img IDs')
+    
+        return self.get_img_url()
      
 ###############################################################     
 #根据图片Id爬取tags的代码也已经完成 pipeline准备完毕之即可取消yield注释

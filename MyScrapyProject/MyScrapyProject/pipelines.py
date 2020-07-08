@@ -15,13 +15,15 @@ class MyscrapyprojectPipeline:
 
 class AddToUserStarImagePPL:
     def __init__(self):
+        pass
+    def open_spider(self,spider):
         self.connect=SQLOS.Connect_to_DB()
     def process_item(self,item,spider):
         try:
             with self.connect.cursor() as cursor:
                 sqlwrite="INSERT INTO `d_user_star_image`(`userid`,`imageid`,`add_date`)VALUES(%d,%d,%s)"
                 cursor.execute(sqlwrite,(item.get("UserID",""),item.get("ImageID",""),item.get("Add_date","")))
-            self.connect.commit()
+                cursor.connection.commit()
         
         except Exception as e:
              pass
