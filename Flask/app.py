@@ -7,6 +7,7 @@ from flask import render_template
 from datetime import timedelta
 from flask import redirect
 import pymysql.cursors
+from pixivpy3 import *
 
 app = Flask(__name__) #创建一个swgi应用
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=5)
@@ -68,6 +69,17 @@ def list():
 def recommend():
     return render_template('recommend.html')
 
+#跳转到这个页面之后 就下载PicID这个图片
+@app.route('/download/<PicID>')
+def download(PicID):
+    api = AppPixivAPI()
+    api.login("CakeBaker.0308@gmail.com", "12138ckC")
+    json_result = api.illust_detail(int(PicID))
+    illust = json_result.illust
+    api.download(illust.image_urls.large)
+    print(">>> origin url: %s" % illust.image_urls['large'])
+    return 'NowDownloading'
+    
 @app.route('/time')
 def time():
     return render_template('user/time.html')
