@@ -26,10 +26,8 @@ class AddToUserStarImagePPL:
                 if(SQLOS.CheckStarImage(item.get("UserID"),item.get("ImageID"))):
                     pass
                 else:
-                    sqlwrite="INSERT INTO `d_user_star_image`(`userid`,`imageid`,`add_date`)VALUES(%s,%s,%s)"
-                    cursor.execute(sqlwrite,(item.get("UserID"),item.get("ImageID"),datetime.datetime.today()))
+                   
                     SQLOS.AddStarImage(item.get("UserID"),item.get("ImageID"))
-                cursor.connection.commit()
                
         
         except Exception as e:

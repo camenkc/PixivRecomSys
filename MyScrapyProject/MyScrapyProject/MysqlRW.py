@@ -1,10 +1,10 @@
-from items import UserAccount
+from MyScrapyProject.items import UserAccount
 from itemadapter import ItemAdapter
 
 import pymysql.cursors
 
 import datetime
-from spiders.PureSpiders import ScrapyForPicTagsClass
+from MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
 
 class MYF():
@@ -198,7 +198,6 @@ class SQLOS():
                 return 1
              except:
                 db.rollback()
-                print(333)
                 return 0
         else:
             return -1#更改制定ID的用户账户信息，成功返回1，失败返回0，未找到ID返回-1
@@ -250,6 +249,15 @@ class SQLOS():
         for onedate in DataFromSQL:
             TagDict[onedate['TagName']]=onedate['TagID']
         return TagDict#得到数据库储存Tag列表，返回一个dict 键值为tag
+    def GetTagDict_rev():
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        cursor.execute("SELECT * from d_tag_list")
+        DataFromSQL=cursor.fetchall()
+        TagDict={}
+        for onedate in DataFromSQL:
+            TagDict[onedate['TagID']]=onedate['TagName']
+        return TagDict
 
     def ChangeUserPixiv(ID,pixivID,pixivpw):
         User=SQLOS.GetUserAccount(ID)
@@ -284,9 +292,26 @@ class SQLOS():
         User['Usermode']=not User['Usermode']
         SQLOS.EditUserAccount(ID,User) #更改用户模式
         SQLOS.WritetoLog(ID,2,("修改账户类型为 %s"% (not User['Usermode'])))#更改账户类型，并向日志中写入一条记录
+
+    def GetMostTag(UserID):
+        usertag=SQLOS.GetUserTagDic(UserID)
+        taglist=SQLOS.GetTagDict_rev()
+        #print (taglist)
+        newtagcount ={}
+        for tagid,count in usertag.items():
+            #print(tagid,count)
+            
+            newtagcount[taglist[tagid]]=count
+        result=sorted(newtagcount.items(),key=lambda x:x[1],reverse=True)
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        for tagname,count in result:
+            if(count>1):
+                cursor.execute("INSERT INTO d_tag_star (`Tagname`,`count`)VALUE (%s,%s)",(tagname,count))
+        db.commit()
+        db.close()
+
     
 
           
    
-
-
