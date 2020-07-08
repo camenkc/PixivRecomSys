@@ -5,7 +5,7 @@
 
 
 # useful for handling different item types with a single interface
-from MyScrapyProject.MysqlRW import SQLOS
+from MysqlRW import SQLOS
 from itemadapter import ItemAdapter
 import pymysql.cursors
 
