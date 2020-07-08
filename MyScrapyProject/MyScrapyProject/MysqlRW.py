@@ -1,4 +1,4 @@
-from items import UserAccount
+from MyScrapyProject.items import UserAccount
 from itemadapter import ItemAdapter
 import pymysql.cursors
 
