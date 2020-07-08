@@ -34,13 +34,12 @@ class MYF():
             lastmaxnum-=-1
         return newdict #输入原tag的dict和需要补充进去tag的list，返回新生成的tagdict
     def AddUserTag(userdict,taglist,tagdict):
-        newdict={}
         for tag in taglist:
             if(userdict.__contains__(tagdict[tag])):
-                newdict[tagdict[tag]]=userdict[tagdict[tag]]+1
+                userdict[tagdict[tag]]-=-1
             else:
-                newdict[tagdict[tag]]=1
-        return newdict#输入用户tagdict,需要添加的taglist，和完整的tagdict
+                userdict[tagdict[tag]]=1
+        return userdict#输入用户tagdict,需要添加的taglist，和完整的tagdict
 
 
 
@@ -107,23 +106,41 @@ class SQLOS():
             db.close()
             return 0 #向数据库中填入一条收藏数据
     
-    def UpdateUsertag(userid,userdict):
+    def UpdateUsertag(userid,pictags):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
         try:
-            for tagid,tagcount in userdict.items():
-                #print(tagid)
-                if(cursor.execute("SELECT * FROM d_user_tag WHERE`userid`=%s AND `tagid`=%s",(userid,tagid))):
-                    if tagcount==0:
-                        cursor.execute("DELETE FROM d_user_tag WHERE `userid`=%s AND `tagid`=%s",(userid,tagid))#删除count为零的记录
-                    else:
-                        cursor.execute("UPDATE d_user_tag SET `count`=%s WHERE `userid`=%s AND `tagid`=%s ",(tagcount,userid,tagid))#更新tag
-                else:
-                    cursor.execute("INSERT INTO d_user_tag (`userid`,`tagid`,`count`) VALUE (%s,%s,%s)",(userid,tagid,tagcount))#没有数据的话插入一条新的数据
+            for tag in pictags:
+                #对于每一个新收藏图片的tag 先检查再taglist中有没有这个tag：
+                sqlSelect='select `tagid` from `d_tag_list` where `tagname`= %s'
+                info = cursor.execute(sqlSelect,(tag))
+                if info ==0 : #说明这个tag不存在与tagList中
+                    sqlInsert='insert into `d_tag_list`(`tagname`) values(%s)'
+                    cursor.execute(sqlInsert,(tag))
+                    info = cursor.execute(sqlSelect,(tag))
+                info = cursor.fetchall()
+                tagid=info[0]['tagid']
+                #下面对这些tag在UserTag计数器中+1
+                
+                #首先判断是否存在于其中
+                sqlSelect='select `count` from `d_user_tag` where `userid` = '+str(userid)+'  and `tagid` = '+str(tagid)+''
+                info = cursor.execute(sqlSelect)
+                if info==0:#说明这个tag不存在这个用户的收藏tag中
+                    sqlInsert='insert into `d_user_tag`(`userid`,`tagid`,`count`) values(%s,%s,%s)'
+                    cursor.execute(sqlInsert,(str(userid),str(tagid),str(1)))
+                    countNumber=1
+                else : #说明在这个tag中 需要把count+1
+                    info = cursor.fetchall()
+                    countNumber=info[0]['count']
+                    countNumber=int(countNumber)+1
+                    sqlUpdate='UPDATE `d_user_tag` SET `count`='+str(countNumber)+' WHERE `userid`='+str(userid)+' and `tagid`= '+str(tagid)
+                    cursor.execute(sqlUpdate)
+                #print('TagID：'+str(tagid)+' 已经成功更新 '+' 计数为：'+str(countNumber))
             db.commit()
             db.close()
             return 1
-        except:
+        except Exception as e:
+            print(e)
             db.rollback()
             db.close()
             return 0 #更新数据库中user的tag列表
@@ -134,28 +151,11 @@ class SQLOS():
         if(SQLOS.CheckStarImage(Userid,Imageid)):
             return -1#数据库已有收藏的话 略过
         else:
-            UserTag=SQLOS.GetUserTagDic(Userid) #从数据库拖数据下来
-    #        print(111)
-            TagDict=SQLOS.GetTagDict() #从数据库拖dict下来
-     #       print(222)
-
             spider=ScrapyForPicTagsClass()
-            pictag=spider.GetTagList(Imageid) #爬取图片tag
-    #        print(333)
-            addtaglist=MYF.DictDif1(TagDict,pictag)#有哪些tag是没有的 组成一个list
-    #        print(444)
-            newdict=MYF.FullfillTag(TagDict,addtaglist)#更新本地tagdict为完整的tag（dict形式
-    #        print(555)
-            updatedict=MYF.DictDif2(TagDict,newdict) #需要补充进taglist的tag（dict形式）
-    #        print(666)
-          #  print(UserTag)
-            newsert=MYF.AddUserTag(UserTag,pictag,newdict)#更新本地用户的tagdict
-     #       print(777)
+            pictag=spider.GetTagList(Imageid) #爬取图片tag 
             SQLOS.UpdateOneStarImage(Userid,Imageid) #更新数据库用户收藏列表
-      #      print(888)
-            SQLOS.UpdateTaglist(updatedict) #更新数据库Tag列表
-       #     print(999)
-            SQLOS.UpdateUsertag(Userid,newsert) #更新数据库用户tag分析列表
+            
+            SQLOS.UpdateUsertag(Userid,pictag) #更新数据库用户tag分析列表 传入UserID和他新收藏的这张图片的tags
             SQLOS.WritetoLog(Userid,4,("添加收藏: %s"%Imageid))
 
             return 1 #向数据库中添加一条收藏记录，并更新tag_list与user_tag
