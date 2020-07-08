@@ -34,12 +34,13 @@ class MYF():
             lastmaxnum-=-1
         return newdict #输入原tag的dict和需要补充进去tag的list，返回新生成的tagdict
     def AddUserTag(userdict,taglist,tagdict):
+        newdict={}
         for tag in taglist:
             if(userdict.__contains__(tagdict[tag])):
-                userdict[tagdict[tag]]-=-1
+                newdict[tagdict[tag]]=userdict[tagdict[tag]]+1
             else:
-                userdict[tagdict[tag]]=1
-        return userdict#输入用户tagdict,需要添加的taglist，和完整的tagdict
+                newdict[tagdict[tag]]=1
+        return newdict#输入用户tagdict,需要添加的taglist，和完整的tagdict
 
 
 
@@ -147,13 +148,13 @@ class SQLOS():
             updatedict=MYF.DictDif2(TagDict,newdict) #需要补充进taglist的tag（dict形式）
    #         print(666)
     #        print(UserTag)
-            MYF.AddUserTag(UserTag,pictag,newdict)#更新本地用户的tagdict
+            newusertag=MYF.AddUserTag(UserTag,pictag,newdict)#更新本地用户的tagdict
      #       print(777)
             SQLOS.UpdateOneStarImage(Userid,Imageid) #更新数据库用户收藏列表
       #      print(888)
             SQLOS.UpdateTaglist(updatedict) #更新数据库Tag列表
        #     print(999)
-            SQLOS.UpdateUsertag(Userid,UserTag) #更新数据库用户tag分析列表
+            SQLOS.UpdateUsertag(Userid,newusertag) #更新数据库用户tag分析列表
             SQLOS.WritetoLog(Userid,4,("添加收藏: %s"%Imageid))
 
             return 1 #向数据库中添加一条收藏记录，并更新tag_list与user_tag

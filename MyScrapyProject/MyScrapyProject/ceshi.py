@@ -24,6 +24,6 @@ item['Usermode']=4
 #print(MYF.DictDif2({'数':1},{'数':1,'车':2}))
 #SQLOS.UpdateTaglist({'东方':7})
 #SQLOS.UpdateUsertag(1,{4:1,6:1,20:5})
-for a in range(82827314,82827324):
-    SQLOS.AddStarImage(1,a)
+for a in range(82484146,82484246):
+    SQLOS.AddStarImage(5,a)
   
