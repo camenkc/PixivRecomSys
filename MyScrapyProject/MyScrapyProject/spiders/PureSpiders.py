@@ -1,4 +1,8 @@
-#import socks
+import sys
+import os
+from sys import path
+path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
+
 import requests
 import json
 import os

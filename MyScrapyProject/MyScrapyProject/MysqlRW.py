@@ -1,10 +1,9 @@
 import sys
-sys.path.append('../')
-from MyScrapyProject.MyScrapyProject.items import UserAccount
+import os
+from sys import path
+path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
 from itemadapter import ItemAdapter
-
 import pymysql.cursors
-
 import datetime
 from MyScrapyProject.MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
@@ -199,7 +198,7 @@ class SQLOS():
     def GetUserAccount(ID):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
-        UserAC=UserAccount()
+        UserAC={}
         if cursor.execute("SELECT * from d_user_account WHERE `ID`=%s",ID):
             DataFromSQL=cursor.fetchall()
             UserAC['ID']=DataFromSQL[0]['ID']
