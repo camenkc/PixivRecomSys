@@ -80,7 +80,6 @@ def list():
 def recommend():
     return render_template('recommend.html')
 
-
 @app.route('/personinfoedit')
 def perinfoedit():
     return render_template('personal_infoedit.html')
@@ -90,10 +89,10 @@ def perinfoedit():
 def id_edit():
     return render_template('id_edit.html')
 
-
 @app.route('/status1')
 def status1():
     return render_template('status1.html')
+
 
 # 检查登录信息是否正确
 # 无此账户进入AccountNotFound.html(未写)

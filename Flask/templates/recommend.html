@@ -76,9 +76,15 @@
 			<span class="line"></span>
 			<div class="swiper-button-next"> &gt; </div>
 			<div class="swiper-button-prev"> &lt;</div>	
-				
+
+		
+			<input type="submit" value="换一个tag" onclick ="change_tag()">
+		
+
 	</div>			
 </div>
+
+
 
 <div class="section index-sec4">
 	<div class="swiper-container animated" id="swiper1">
@@ -102,11 +108,21 @@
 						<br><div style="font-size:12;color:#000">xxx</div>
 					</a>				            	
 				</div>	
+
 				
 			</div>     
 			<span class="line"></span>
 			<div class="swiper-button-next"> &gt; </div>
 			<div class="swiper-button-prev"> &lt;</div>	
+
+			</div>
+			<input type="submit" value="换一个画师" onclick ="change_painter()"">	
+			<br><br><br>
+			<span class="line"></span>
+			<div class="swiper-button-next"> &gt; </div>
+			<div class="swiper-button-prev"> &lt;</div>	
+
+
 				
 	</div>			
 </div>
@@ -123,8 +139,18 @@
 <script src="http://www.5imoban.net/download/fullPage/fullPage-2.7.1.min.js"></script>
 <script src="js/more.js"></script>
 <script>			
+
 	
 	
+
+	function change_tag(){
+		alert ("测试成功");
+	}
+
+	function change_painter(){
+		alert ("测试成功");
+	}
+
 	
 	var swiper = new Swiper('#swiper1', {
 		loop:true,
