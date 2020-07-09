@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>时间本地化</title>
+        {{ moment.include_jquery() }}
+        {{ moment.include_moment() }}
+        {{ moment.lang("zh-CN") }}
+    </head>
+
+    <body>
+        {{ moment().format("YYYY-MM-DD") }} <br/>
+        {{ moment().format("YYYY-MM-DD a") }} <br/>
+        {{ moment().format("YYYY-MM-DD H:mm:ss a") }}
+        
+    </body>
+</html>
