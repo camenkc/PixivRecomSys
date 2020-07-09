@@ -25,12 +25,10 @@ item['Usermode']=4
 #SQLOS.UpdateTaglist({'东方':7})
 #SQLOS.UpdateUsertag(1,{4:1,6:1,20:5})
 
-#print(SQLOS.GetImageIdlist("风景",5))
-#print(">>> %s, origin url: %s" % (illust.title, illust.image_urls['large']))
+#aapi = AppPixivAPI()
+#aapi.login("CakeBaker.0518@gmail.com","12138ckC")
 #json_result = AppPixivAPI.search_illust(aapi,"风景",)
 #for illust in json_result.illusts[:3]:
 #    aapi.download(illust.image_urls.large)
-#print(SQLOS.UserLogin("piupiuko","piupiuko"))
-#SQLOS.EditUserProfile(888,"piupiupiu","piupiupiu")
-#SQLOS.UserLogin("piupiupiu","piupiupiu")
-#print(SQLOS.GetStarImageNum(103))
+print(SQLOS.UserLogin("piupiuko","piupiuko"))
+SQLOS.EditUserProfile(888,"piupiupiu","piupiupiu")

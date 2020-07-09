@@ -11,6 +11,35 @@
 	}
 }
 
+.login-button { /* 按钮美化 */
+	width: 150px; /* 宽度 */
+	height: 40px; /* 高度 */
+	border-width: 0; /* 边框宽度 */
+	border-radius: 3px; /* 边框半径 */
+	background: rgb(30, 109, 255); /* 背景颜色 */
+	cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+	outline-style:double;
+	outline-color:#d0ff00; /* 轮廓线 */
+	font-family: Microsoft YaHei; /* 设置字体 */
+	color: white; /* 字体颜色 */
+	font-size: 17px; /* 字体大小 */
+	vertical-align: middle;
+}
+
+.login-button1 { /* 按钮美化 */
+	width: 60px; /* 宽度 */
+	height: 20px; /* 高度 */
+	border-width: 0; /* 边框宽度 */
+	border-radius: 3px; /* 边框半径 */
+	background: #1E90FF; /* 背景颜色 */
+	cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+	outline: none; /* 不显示轮廓线 */
+	font-family: Microsoft YaHei; /* 设置字体 */
+	color: white; /* 字体颜色 */
+	font-size: 17px; /* 字体大小 */
+	vertical-align: middle;
+}
+
 .fadeInLeftSmall {
 	animation-name: fadeInLeftSmall;
 }

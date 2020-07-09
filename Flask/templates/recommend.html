@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <title>基于pixiv的画师推荐平台</title>
-<link rel="stylesheet" type="text/css" href="static/css/style.css" />
-<link rel="stylesheet" href="{{ url_for('static', filename='css/initial.css') }}">
-<link rel="stylesheet" type="text/css" href="static/css/common.css">		
-<link rel="stylesheet" type="text/css" href="static/css/animate.min.css">
-<link rel="stylesheet" type="text/css" href="static/css/animate.css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/initial.css')}}">
 <link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
 <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css"/>
 <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css"/>
@@ -49,12 +48,12 @@
 	</div>
 </div>	
 <!--search_sec end-->
-	 
+
 <div class="section index-sec4">
 	<div class="swiper-container animated" id="swiper2">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide">
-
+									
 					<a href="">
 						<p>根据tagxxxx向您推荐</p>
 							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
@@ -77,22 +76,24 @@
 			<span class="line"></span>
 			<div class="swiper-button-next"> &gt; </div>
 			<div class="swiper-button-prev"> &lt;</div>	
+
 		
 			<input type="submit" value="换一个tag" onclick ="change_tag()">
 		
+
 	</div>			
 </div>
 
 
 
 <div class="section index-sec4">
-	<div class="swiper-container animated" id="swiper3">
+	<div class="swiper-container animated" id="swiper1">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide">
 									
 					<a href="">
-						<p>根据画师[xxx]向您推荐</p>
-						<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+						<p>根据tagxxxx向您推荐</p>
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
 							<div style="font-size:12;color:#000">画师xxx</div>
 							<br><div style="font-size:12;color:#000">xxx</div>
 					</a>				            	
@@ -101,12 +102,19 @@
 				<div class="swiper-slide">
 													
 					<a href="">
-						<p>根据画师[xxxx]向您推荐</p>
-					
+						<p>根据xxxx向您推荐2</p>
+						<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
 						<div style="font-size:12;color:#000">画师xxx</div>
 						<br><div style="font-size:12;color:#000">xxx</div>
 					</a>				            	
 				</div>	
+
+				
+			</div>     
+			<span class="line"></span>
+			<div class="swiper-button-next"> &gt; </div>
+			<div class="swiper-button-prev"> &lt;</div>	
+
 			</div>
 			<input type="submit" value="换一个画师" onclick ="change_painter()"">	
 			<br><br><br>
@@ -114,12 +122,13 @@
 			<div class="swiper-button-next"> &gt; </div>
 			<div class="swiper-button-prev"> &lt;</div>	
 
+
 				
 	</div>			
-</div>	
-
-
+</div>
+			
 <div class="section index-sec1"></div>
+
 
 
 <script src="http://www.5imoban.net/download/jquery/jquery-1.8.3.min.js"></script>
@@ -130,6 +139,10 @@
 <script src="http://www.5imoban.net/download/fullPage/fullPage-2.7.1.min.js"></script>
 <script src="js/more.js"></script>
 <script>			
+
+	
+	
+
 	function change_tag(){
 		alert ("测试成功");
 	}
@@ -137,6 +150,7 @@
 	function change_painter(){
 		alert ("测试成功");
 	}
+
 	
 	var swiper = new Swiper('#swiper1', {
 		loop:true,
@@ -168,23 +182,7 @@
 		      spaceBetween:40,
 		    }
 	     }
-	  }); 
-
-	  var swiper = new Swiper('#swiper3',{				
-		loop:true,
-		loopedSlides:3,
-		spaceBetween:80,
-		centeredSlides:true,
-		slidesPerView : 'auto',
-        pagination: '.swiper-pagination',
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev',
-        breakpoints: { 				   
-		    1600: {
-		      spaceBetween:40,
-		    }
-	     }
-	  }); 
+	  });  
 	
 </script>
 </body>

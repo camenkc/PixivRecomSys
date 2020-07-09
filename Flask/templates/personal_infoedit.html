@@ -51,35 +51,54 @@
 		</div>
 	</div>
 </div>	
-<!--search_sec end-->
+
 <div id="bloc">
 	<article id="index">
         
         <div class="section index-sec1">
             <div class="sec1-cont">		
             
-				<h3 align="center"> <p style="font-size:30px">登录状态</p>   </h3>
+				<h3 align="center"> <p style="font-size:30px">个人信息修改</p>   </h3>
 		
-		<br><br><br><br>
-		
-		<script>
-			if(0/*判断是否绑定*/){
-				document.write('<h1 align="center"><p style="font-size:30px">未绑定</p></h1>');
-			}
-			else{
-				window.location.href = '/status1';
-			}
-			
-		</script>
+        <br><br>
 
-		<!--此处按钮改动-->
-		<div style="text-align:center">
-			<br><button class = "login-button" onclick = "idedit()">绑定</button>
-		 </div>
+<table style="border: 1px;margin: 0 auto;background: snow" width="50%" cellpadding="5" cellspacing="0" >
 
-		<br><br><br><br><br><br><br><br><br><br><br><br>
-		
-				<p class="p1"></p>
+<tr>
+
+<td style="background: salmon">用户名</td>
+
+<td><input type="text" style="width:95%"></td>
+
+</tr>
+
+<tr>
+
+<td style="background: salmon">密码</td>
+
+<td><input type="text" style="width:95%"></td>
+
+</tr>
+
+<tr>
+
+<td style="background: salmon">确认密码</td>
+	
+<td><input type="text" style="width:95%"></td>
+	
+</tr>
+	
+
+</table>
+
+
+<div style="text-align:center">
+  <br><br><br><br><button class = "login-button" onclick = "person()">提交</button>
+ </div>
+
+<br><br><br><br><br>
+
+<p class="p1"></p>
     
    				</div>
             </div>
@@ -87,8 +106,8 @@
     </div>
 
 	<script type="text/javascript">
-		function idedit(){
-			window.location.href = '/idedit';
+		function person(){
+			window.location.href = '/person';
 		}
 	</script>
 

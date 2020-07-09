@@ -3,10 +3,13 @@
 <head>
 <meta charset="utf-8">
 <title>基于pixiv的画师推荐平台</title>
-<link rel="stylesheet" type="text/css" href="static/css/style.css" />
-<link rel="stylesheet" type="text/css" href="static/css/common.css">	
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/initial.css')}}">
 <link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
-<link rel="stylesheet" type="text/css" href="static/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css"/>
+<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css"/>
 </head>
 	
 <body>
@@ -45,89 +48,55 @@
 	</div>
 </div>	
 <!--search_sec end-->
-
-
-
 <div id="bloc">
 	<article id="index">
-		<div class="banner-position">			
-						<img src="{{ url_for('static',filename ='images/mybg1.jpg')}} " >
-				</div>	  
-				
-				<div class="banner-wave">
-					<svg viewBox="0 0 120 16">
-				
-						<defs>
-				
-							<filter id="goo">
-				
-								<feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur" />
-				
-								<feColorMatrix in="blur" mode="matrix" values="
-				
-								   1 0 0 0 0  
-								
-								   0 1 0 0 0  
-								
-								   0 0 1 0 0  
-								
-								   0 0 0 13 -9" result="goo" />
-				
-								<xfeBlend in="SourceGraphic" in2="goo" />
-				
-							</filter>
-				
-							<path id="wave" d="M 0,10 C 30,10 30,15 60,15 90,15 90,10 120,10 150,10 150,15 180,15 210,15 210,10 240,10 v 28 h -240 z" />
-				
-						</defs>
-				
-						<use id="wave3" class="wave" xlink:href="#wave" x="0" y="-2"></use>
-				
-						<use id="wave2" class="wave" xlink:href="#wave" x="0" y="0"></use>
-				
-						<g class="gooeff" filter="url(#goo)">
-				
-							<circle class="drop drop1" cx="20" cy="2" r="8.8" />
-				
-							<circle class="drop drop2" cx="25" cy="2.5" r="7.5" />
-				
-							<circle class="drop drop3" cx="16" cy="2.8" r="9.2" />
-				
-							<circle class="drop drop4" cx="18" cy="2" r="8.8" />
-				
-							<circle class="drop drop5" cx="22" cy="2.5" r="7.5" />
-				
-							<circle class="drop drop6" cx="26" cy="2.8" r="9.2" />
-				
-							<circle class="drop drop1" cx="5" cy="4.4" r="8.8" />
-				
-							<circle class="drop drop2" cx="5" cy="4.1" r="7.5" />
-				
-							<circle class="drop drop3" cx="8" cy="3.8" r="9.2" />
-				
-							<circle class="drop drop4" cx="3" cy="4.4" r="8.8" />
-				
-							<circle class="drop drop5" cx="7" cy="4.1" r="7.5" />
-				
-							<circle class="drop drop6" cx="10" cy="4.3" r="9.2" />
-				
-							<circle class="drop drop1" cx="1.2" cy="5.4" r="8.8" />
-				
-							<circle class="drop drop2" cx="5.2" cy="5.1" r="7.5" />
-				
-							<circle class="drop drop3" cx="10.2" cy="5.3" r="9.2" />
-				
-							<circle class="drop drop4" cx="3.2" cy="5.4" r="8.8" />
-				
-							<circle class="drop drop5" cx="14.2" cy="5.1" r="7.5" />
-				
-							<circle class="drop drop6" cx="17.2" cy="4.8" r="9.2" />
-				
-							<use id="wave1" class="wave" xlink:href="#wave" x="0" y="1" />
-				
-						</g>
-					</svg>
-				</div>
-			</div>
+        
+        <div class="section index-sec1">
+            <div class="sec1-cont">		
+            
+				<h3 align="center"> <p style="font-size:30px">个人信息</p>   </h3>
+		
+        <br><br><br><br>
+
+        <table border="1" bordercolor="yellow" align="center">
+            <tr>
+                <td>
+                    <h3>用户名</h3>
+                </td>
+                <td>
+					<input type="text" id="name"" name="name">
+                </td>
+                <td>
+                    <h3>密码</h3>
+                </td>
+                <td>
+					<input type="text" id="password" name="password"
+                </td>
+            </tr>
+            <!--待添加其他信息-->
+        </table>
+
+        <!--创建按钮，修改个人信息-->
+        <div style="text-align:center">
+			<br><button class = "login-button" onclick = "personinfoedit()">修改信息</button>
+		 </div>
+
+		 <br><br><br><br><br><br>
+
+		<h5 align="right">隐藏模式</h5>
+        <div style="text-align:right">
+			<button class = "login-button1" onclick = "">切换</button>
+		</div>
+
+		<br>
+
+	<script type="text/javascript">
+		 function personinfoedit(){
+			window.location.href = '/personinfoedit';
+		}
+	</script>
+	
+</div>
+
 </body>
 </html>

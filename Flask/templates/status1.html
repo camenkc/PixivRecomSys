@@ -62,35 +62,27 @@
 		
 		<br><br><br><br>
 		
-		<script>
-			if(0/*判断是否绑定*/){
-				document.write('<h1 align="center"><p style="font-size:30px">未绑定</p></h1>');
-			}
-			else{
-				window.location.href = '/status1';
-			}
-			
-		</script>
 
-		<!--此处按钮改动-->
-		<div style="text-align:center">
-			<br><button class = "login-button" onclick = "idedit()">绑定</button>
-		 </div>
+        <table border="1" bordercolor="yellow" align="center">
+            <tr>
+                <!--根据数据判断未绑定还是已绑定，若绑定，则显示相关ID，未绑定就显示未绑定-->
+                <td>
+                    <h3><p style="font-size:20px">已绑定ID</p></h3>
+                </td>
+                <td>
+                    <input type="text" id="id" name="id">
+                </td>
+            </tr>
+        </table>
 
-		<br><br><br><br><br><br><br><br><br><br><br><br>
-		
+        <br><br><br><br><br><br><br><br><br><br><br>
+
 				<p class="p1"></p>
     
    				</div>
             </div>
         </article>
     </div>
-
-	<script type="text/javascript">
-		function idedit(){
-			window.location.href = '/idedit';
-		}
-	</script>
 
 
 </body>
