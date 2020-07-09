@@ -6,6 +6,7 @@ import pymysql.cursors
 import datetime
 from MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
+import MyScrapyProject.pixivpymaster.pixivpy3
 
 class MYF():
     def __init__(self):
@@ -40,14 +41,18 @@ class MYF():
                 newdict[tagdict[tag]]=userdict[tagdict[tag]]+1
             else:
                 newdict[tagdict[tag]]=1
-        return newdict#输入用户tagdict,需要添加的taglist，和完整的tagdict
+        return newdict#输入用户tagdict,需要添加的taglist，和完整的tagdict 返回需要修改的dict
+    def DeleteUserTag(userdict,taglist,tagdict):
+        newdict={}
+        for tag in taglist:
+           newdict[tagdict[tag]]=userdict[tagdict[tag]]-1
+        return newdict#输入用户tagdict,需要添加的taglist，和完整的tagdict 返回需要修改的dict
 
 
 
 class SQLOS():
     def __init__(self):
         pass
-
     def WritetoLog(Userid,type,LogCentent):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -62,7 +67,6 @@ class SQLOS():
             
             db.rollback()
         db.close()#生成日志用函数，传入三个参数，用户ID、日志类别、日志信息
-
     def Connect_to_DB():
         connection = pymysql.connect(host='rm-bp10wr08s7nl319dcyo.mysql.rds.aliyuncs.com',
                         user='pixiv_rec_staff',
@@ -70,8 +74,7 @@ class SQLOS():
                         db='pixiv_user',
                         charset='utf8mb4',
                         cursorclass=pymysql.cursors.DictCursor)
-        return connection
-
+        return connection#链接服务器 返回一个connect
     def CheckStarImage(Userid,Imageid):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -93,7 +96,6 @@ class SQLOS():
         except:
             db.rollback()
             return 0#向数据库中补充tag 传入一个dict
-    
     def UpdateOneStarImage(Userid,Imageid):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -106,7 +108,18 @@ class SQLOS():
             db.rollback()
             db.close()
             return 0 #向数据库中填入一条收藏数据
-    
+    def DeleteOneStarImage(Userid,Imageid):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        try:
+            cursor.execute("DELETE FROM d_user_star_image WHERE `userid`=%s AND `imageid`=%s",(Userid,Imageid))
+            db.commit()
+            db.close()
+            return 1
+        except:
+            db.rollback()
+            db.close()
+            return 0 #向数据库中删除一条收藏数据
     def UpdateUsertag(userid,userdict):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -127,41 +140,6 @@ class SQLOS():
             db.rollback()
             db.close()
             return 0 #更新数据库中user的tag列表
-
-                
-
-    def AddStarImage(Userid,Imageid):
-        if(SQLOS.CheckStarImage(Userid,Imageid)):
-            return -1#数据库已有收藏的话 略过
-        else:
-            UserTag=SQLOS.GetUserTagDic(Userid) #从数据库拖数据下来
-    #        print(111)
-            TagDict=SQLOS.GetTagDict() #从数据库拖dict下来
-     #       print(222)
-
-            spider=ScrapyForPicTagsClass()
-            pictag=spider.GetTagList(Imageid) #爬取图片tag
-    #        print(333)
-            addtaglist=MYF.DictDif1(TagDict,pictag)#有哪些tag是没有的 组成一个list
-    #        print(444)
-            newdict=MYF.FullfillTag(TagDict,addtaglist)#更新本地tagdict为完整的tag（dict形式
-    #        print(555)
-            updatedict=MYF.DictDif2(TagDict,newdict) #需要补充进taglist的tag（dict形式）
-    #        print(666)
-          #  print(UserTag)
-            newsert=MYF.AddUserTag(UserTag,pictag,newdict)#更新本地用户的tagdict
-     #       print(777)
-            SQLOS.UpdateOneStarImage(Userid,Imageid) #更新数据库用户收藏列表
-      #      print(888)
-            SQLOS.UpdateTaglist(updatedict) #更新数据库Tag列表
-       #     print(999)
-            SQLOS.UpdateUsertag(Userid,newsert) #更新数据库用户tag分析列表
-            SQLOS.WritetoLog(Userid,4,("添加收藏: %s"%Imageid))
-
-            return 1 #向数据库中添加一条收藏记录，并更新tag_list与user_tag
-
-            
-        
     def AddUserAccount(UserAccount):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -182,51 +160,10 @@ class SQLOS():
            
             return 1
         except:
-            print(444)
+           
             db.rollback()
             db.close()
             return 0  #参数为UserAccount 向表中添加一个对象，如果成功返回1，并向日志中写一条注册成功日志。失败返回0
-            
-    def EditUserAccount(ID,UserAccount):
-        db=SQLOS.Connect_to_DB()
-        cursor=db.cursor()
-        if cursor.execute("SELECT * from d_user_account WHERE `ID`=%s",ID):
-
-             try:
-                cursor.execute("UPDATE d_user_account SET `PixivID`=%s,`Pixivpw`=%s,`Username`=%s,`Userpw`=%s,`Usermode`=%s,`lastlogindate`=%s,`lastloginip`=%s,`logincount`=%s WHERE ID=%s",(UserAccount.get("PixivID",""),UserAccount.get("Pixivpw",""),UserAccount.get("Username",""),UserAccount.get("Userpw",""),UserAccount.get("Usermode",""),UserAccount.get("Lastlogindate",""),UserAccount.get("Lastloginip",""),UserAccount.get("Logincount",""),ID))
-                db.commit()
-                return 1
-             except:
-                db.rollback()
-                return 0
-        else:
-            return -1#更改制定ID的用户账户信息，成功返回1，失败返回0，未找到ID返回-1
-    
-
-    def GetUserStarImage(ID):
-        db=SQLOS.Connect_to_DB()
-        cursor=db.cursor()
-        StarImage=[]
-        if cursor.execute("SELECT * from d_user_star_image WHERE `userid`=%s",ID):
-            DataFromSQL=cursor.fetchall()
-            for onedate in DataFromSQL:
-                StarImage.append(onedate['imageid'])
-            return StarImage
-        else:
-            return -1#得到指定ID的收藏图片列表，返回一个list
-
-    def GetUserStarArtist(ID):
-        db=SQLOS.Connect_to_DB()
-        cursor=db.cursor()
-        StarArtist=[]
-        if cursor.execute("SELECT * from d_user_star_artist WHERE `userid`=%s",ID):
-            DataFromSQL=cursor.fetchall()
-            for onedate in DataFromSQL:
-                StarImage.append(onedate['artistid'])
-            return Artist
-        else:
-            return -1#得到指定ID的关注用户列表，返回一个list
-
     def GetUserTagDic(ID):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -239,7 +176,6 @@ class SQLOS():
             return TagDict
         else:
             return {}#得到指定ID的Tag分析列表，返回一个dict
-
     def GetTagDict():
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -257,15 +193,7 @@ class SQLOS():
         TagDict={}
         for onedate in DataFromSQL:
             TagDict[onedate['TagID']]=onedate['TagName']
-        return TagDict
-
-    def ChangeUserPixiv(ID,pixivID,pixivpw):
-        User=SQLOS.GetUserAccount(ID)
-        User['PixivID']=pixivID
-        User['Pixivpw']=pixivpw
-        SQLOS.EditUserAccount(ID,User)
-        SQLOS.WritetoLog(ID,3,("修改绑定P站账号为 %s"%pixivID))#更改账户绑定p站账户，并向日志中写入一条记录
-    
+        return TagDict#得到数据库储存Tag列表，返回一个dict 键值为tagid
     def GetUserAccount(ID):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -286,14 +214,122 @@ class SQLOS():
         else:
             return -1
         db.close()#得到制定ID的用户账户信息，成功返回账户信息，未找到ID返回-1
+    def EditUserAccount(ID,UserAccount):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        if cursor.execute("SELECT * from d_user_account WHERE `ID`=%s",ID):
 
+             try:
+                cursor.execute("UPDATE d_user_account SET `PixivID`=%s,`Pixivpw`=%s,`Username`=%s,`Userpw`=%s,`Usermode`=%s,`lastlogindate`=%s,`lastloginip`=%s,`logincount`=%s WHERE ID=%s",(UserAccount.get("PixivID",""),UserAccount.get("Pixivpw",""),UserAccount.get("Username",""),UserAccount.get("Userpw",""),UserAccount.get("Usermode",""),UserAccount.get("Lastlogindate",""),UserAccount.get("Lastloginip",""),UserAccount.get("Logincount",""),ID))
+                db.commit()
+                return 1
+             except:
+                db.rollback()
+                return 0
+        else:
+            return -1#更改制定ID的用户账户信息，传入一个UserAccount的类，成功返回1，失败返回0，未找到ID返回-1
+
+    def UserRegist(UserName,Userpw):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        if cursor.execute("SELECT * FROM d_user_account WHERE`Username`=%s",UserName):
+            return -1
+        else:
+            
+            pass# 未完成 如果注册成功返回UserID 写入失败返回0 账号名已存在返回-1
+    def UserLogin(UserName,Userpw):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        if cursor.execute("SELECT * FROM d_user_account WHERE`Username`=%s",UserName):
+            if cursor.execute("SELECT * FROM d_user_account WHERE`Username`=%s AND `Userpw`=%s",(UserName,Userpw)):
+                 DataFromSQL=cursor.fetchall()
+                 SQLOS.WritetoLog(DataFromSQL[0]['ID'],0,"登录成功!")
+                 return DataFromSQL[0]['ID'] 
+            else:
+                return -1
+        else:
+            return  0
+        #登录成功返回UserID，账号不存在返回0，密码不正确返回-1
+    def GetUserMode(Userid):
+        useraccount=SQLOS.GetUserAccount(Userid)
+        mode=useraccount["Usermode"]
+        return mode #得到用户模式（是否为隐藏模式）
+    def EditUserProfile(UserID,Username,Userpw):
+        useraccount=SQLOS.GetUserAccount(UserID)
+        useraccount['Username']=Username
+        useraccount['Userpw']=Userpw
+        SQLOS.EditUserAccount(UserID,useraccount)
+        SQLOS.WritetoLog(UserID,2,"修改账户密码")
+        #更改用户账号密码
+    def AddStarImage(Userid,Imageid):
+        if(SQLOS.CheckStarImage(Userid,Imageid)):
+
+            return -1#数据库已有收藏的话 略过
+        else:
+            UserTag=SQLOS.GetUserTagDic(Userid) #从数据库拖数据下来
+            TagDict=SQLOS.GetTagDict() #从数据库拖dict下来
+            spider=ScrapyForPicTagsClass()
+            pictag=spider.GetTagList(Imageid) #爬取图片tag
+            addtaglist=MYF.DictDif1(TagDict,pictag)#有哪些tag是没有的 组成一个list
+            newdict=MYF.FullfillTag(TagDict,addtaglist)#更新本地tagdict为完整的tag（dict形式
+            updatedict=MYF.DictDif2(TagDict,newdict) #需要补充进taglist的tag（dict形式）
+            newsert=MYF.AddUserTag(UserTag,pictag,newdict)#更新本地用户的tagdict 仅含需要修改项
+            SQLOS.UpdateOneStarImage(Userid,Imageid) #更新数据库用户收藏列表
+            SQLOS.UpdateTaglist(updatedict) #更新数据库Tag列表
+            SQLOS.UpdateUsertag(Userid,newsert) #更新数据库用户tag分析列表
+            SQLOS.WritetoLog(Userid,4,("添加收藏: %s"%Imageid))
+
+            return 1 #向数据库中添加一条收藏记录，并更新tag_list与user_tag
+    def DeleteStarImage(Userid,Imageid):
+        if(SQLOS.CheckStarImage(Userid,Imageid)):
+            UserTag=SQLOS.GetUserTagDic(Userid) #从数据库拖数据下来
+            TagDict=SQLOS.GetTagDict() #从数据库拖dict下来
+            spider=ScrapyForPicTagsClass()
+            pictag=spider.GetTagList(Imageid) #爬取图片tag
+            newsert=MYF.DeleteUserTag(UserTag,pictag,TagDict) #更新本地用户的tagdict 仅含需要修改项
+            SQLOS.DeleteOneStarImage(Userid,Imageid)#更新数据库用户收藏列表
+            SQLOS.UpdateUsertag(Userid,newsert)
+            SQLOS.WritetoLog(Userid,5,"移除收藏: %s"%Imageid)
+
+            return 1
+        else:
+            #没有该记录 跳过并返回-1
+            return -1 #向数据库中移除一条收藏记录，并更新user_tag
+
+    def GetUserStarImage(ID):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        StarImage=[]
+        if cursor.execute("SELECT * from d_user_star_image WHERE `userid`=%s",ID):
+            DataFromSQL=cursor.fetchall()
+            for onedate in DataFromSQL:
+                StarImage.append(onedate['imageid'])
+            return StarImage
+        else:
+            return -1#得到指定ID的收藏图片列表，返回一个list
+    def GetUserStarArtist(ID):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        StarArtist=[]
+        if cursor.execute("SELECT * from d_user_star_artist WHERE `userid`=%s",ID):
+            DataFromSQL=cursor.fetchall()
+            for onedate in DataFromSQL:
+                StarImage.append(onedate['artistid'])
+            return Artist
+        else:
+            return -1#得到指定ID的关注用户列表，返回一个list
+    def ChangeUserPixiv(ID,pixivID,pixivpw):
+        User=SQLOS.GetUserAccount(ID)
+        User['PixivID']=pixivID
+        User['Pixivpw']=pixivpw
+        SQLOS.EditUserAccount(ID,User)
+        SQLOS.WritetoLog(ID,3,("修改绑定P站账号为 %s"%pixivID))#更改账户绑定p站账户，并向日志中写入一条记录
     def SwitchUserMode(ID):
         User=SQLOS.GetUserAccount(ID)
         User['Usermode']=not User['Usermode']
         SQLOS.EditUserAccount(ID,User) #更改用户模式
-        SQLOS.WritetoLog(ID,2,("修改账户类型为 %s"% (not User['Usermode'])))#更改账户类型，并向日志中写入一条记录
-
-    def GetMostTag(UserID):
+        SQLOS.WritetoLog(ID,2,("修改账户类型为 %s"% (not User['Usermode'])))#更改账户类型
+    def GetMostTag(Userid,num):
         usertag=SQLOS.GetUserTagDic(UserID)
         taglist=SQLOS.GetTagDict_rev()
         #print (taglist)
@@ -303,15 +339,12 @@ class SQLOS():
             
             newtagcount[taglist[tagid]]=count
         result=sorted(newtagcount.items(),key=lambda x:x[1],reverse=True)
-        db=SQLOS.Connect_to_DB()
-        cursor=db.cursor()
+        a=1
+        newdict={}
         for tagname,count in result:
-            if(count>1):
-                cursor.execute("INSERT INTO d_tag_star (`Tagname`,`count`)VALUE (%s,%s)",(tagname,count))
-        db.commit()
-        db.close()
-
-    
-
-          
-   
+            if(a<num):
+                newdict[tagname]=count
+                a-=-1
+            else:
+                pass
+        return newdict#返回用户前若干个tag偏好

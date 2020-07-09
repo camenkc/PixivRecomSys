@@ -5,7 +5,7 @@ import datetime
 import pymysql
 import socket
 from spiders.PureSpiders import ScrapyForPicTagsClass
-
+from MyScrapyProject.pixivpymaster.pixivpy3 import *
 #spider=ScrapyForPicTagsClass()
 #taglist=spider.GetTagList(79562473)
 #print(taglist)
@@ -24,4 +24,11 @@ item['Usermode']=4
 #print(MYF.DictDif2({'数':1},{'数':1,'车':2}))
 #SQLOS.UpdateTaglist({'东方':7})
 #SQLOS.UpdateUsertag(1,{4:1,6:1,20:5})
-SQLOS.GetMostTag(1)
+
+#aapi = AppPixivAPI()
+#aapi.login("CakeBaker.0518@gmail.com","12138ckC")
+#json_result = AppPixivAPI.search_illust(aapi,"风景",)
+#for illust in json_result.illusts[:3]:
+#    aapi.download(illust.image_urls.large)
+print(SQLOS.UserLogin("piupiuko","piupiuko"))
+SQLOS.EditUserProfile(888,"piupiupiu","piupiupiu")
