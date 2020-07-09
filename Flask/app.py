@@ -38,10 +38,11 @@ def index(UserId):
     
     return render_template('index.html',UserAccount)
 
-@app.route('/BindPixivID/<pixid>')
-def BindPixivID(pixid):
+@app.route('/BindPixivID/<userid>,<pixid>')
+def BindPixivID(userid,pixid):
     pixid=int(pixid)
-    
+    userid=int(userid)
+    SQLOS.ChangeUserPixiv(userid,pixid)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
