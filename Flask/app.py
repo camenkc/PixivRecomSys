@@ -119,6 +119,7 @@ def list(userid):
             RankInWeek[p]['title'] = RankInWeek[p]['title'][:6]+'...'
         if len(RankInWeek[p]['author'])>6:
             RankInWeek[p]['author'] = RankInWeek[p]['author'][:6]+'...'
+        RankInWeek[p]['address']='https://www.pixiv.net/artworks/'+str(RankInWeek[p]['ID'])
         RankInWeek[p]['ID']='static/images/'+str(RankInWeek[p]['ID'])+"_p0_square1200.jpg"
         print(RankInWeek[p]['ID'])
     print('Now Catch Rank In Month')
@@ -129,6 +130,7 @@ def list(userid):
             RankInMonth[p]['title'] = RankInMonth[p]['title'][:6]+'...'
         if len(RankInMonth[p]['author'])>6:
             RankInMonth[p]['author'] = RankInMonth[p]['author'][:6]+'...'
+        RankInMonth[p]['address']='https://www.pixiv.net/artworks/'+str(RankInMonth[p]['ID'])
         RankInMonth[p]['ID']='static/images/'+str(RankInMonth[p]['ID'])+"_p0_square1200.jpg"
         print(RankInMonth[p]['ID'])
     

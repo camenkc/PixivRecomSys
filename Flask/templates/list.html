@@ -1,309 +1,375 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>pixiv收藏分析与图片推荐平台</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/initial.css')}}">
-<link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
-<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css"/>
-<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css"/>
+    <meta charset="utf-8">
+    <title>pixiv收藏分析与图片推荐平台</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/initial.css')}}">
+    <link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css" />
 </head>
-	
+
 <body>
-<div class="index-header clearfix">
-	<div class="index-logo fl">
-		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a> 
-		<br/>{{UserAccount.Username}}
-	</div>
-	<ul class="index-nav fl">
-		<li><a href="/index/{{UserAccount.ID}}">首页</a></li>
-		<li><a href="/status/{{UserAccount.ID}}">登录状态</a></li>
-		<li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
-		<li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
-		<li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
-		<li><a href="/bingtu/{{UserAccount.ID}}">最爱的Tags</a></li>
-	</ul>
-	<div class="index-header-right fr">
-		<a href="" class="search-btn">搜索</a>	
-		<a href="" class="erweima">
-			<div class="erweima-pic">
-				<img src=" {{url_for('static', filename='images/pic1.jpg')}} ">
-			</div>
-		</a>
-	</div>
-	<div class="clear"></div>
-</div>
-	
-<div class="search_sec">
-	<a href="#" title="" class="close-search"><i class=" la-close"><img src="{{ url_for('static',filename ='images/icon5.png')}}"></i></a>
-	<div class="search_field">
-		<div class="container">
-			<form>
-				<input type="text" name="search" placeholder="Search for...">
-				<button type="submit"><img src="{{ url_for('static',filename ='images/search2.png')}}" alt=""></button>
-			</form>
-		</div>
-	</div>
-</div>	
-<!--search_sec end-->
+    <div class="index-header clearfix">
+        <div class="index-logo fl">
+            <a href=""><img src="{{url_for('static', filename='images/girl.png') }}" width="50" height="50"></a>
+            <br />{{UserAccount.Username}}
+        </div>
+        <ul class="index-nav fl">
+            <li><a href="/index/{{UserAccount.ID}}">首页</a></li>
+            <li><a href="/status/{{UserAccount.ID}}">登录状态</a></li>
+            <li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
+            <li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
+            <li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
+            <li><a href="/bingtu/{{UserAccount.ID}}">最爱的Tags</a></li>
+        </ul>
+        <div class="index-header-right fr">
+            <a href="" class="search-btn">搜索</a>
+            <a href="" class="erweima">
+                <div class="erweima-pic">
+                    <img src=" {{url_for('static', filename='images/pic1.jpg')}} ">
+                </div>
+            </a>
+        </div>
+        <div class="clear"></div>
+    </div>
 
-<div class="section index-sec4">
-	<div class="swiper-container animated" id="swiper2">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-									
-					<a href="">
-							<br/><br/><br/>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[0].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[0].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[0].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[1].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[1].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[1].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[2].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[2].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[2].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[3].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[3].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[3].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[4].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[4].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[4].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[5].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[5].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[5].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[6].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[6].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[6].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[7].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[7].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[7].author}}</div>
-							</div>
-					</a>				            	
-				</div>	
+    <div class="search_sec">
+        <a href="#" title="" class="close-search"><i class=" la-close"><img src="{{ url_for('static',filename ='images/icon5.png')}}"></i></a>
+        <div class="search_field">
+            <div class="container">
+                <form>
+                    <input type="text" name="search" placeholder="Search for...">
+                    <button type="submit"><img src="{{ url_for('static',filename ='images/search2.png')}}" alt=""></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--search_sec end-->
 
-				<div class="swiper-slide">
-													
-					<a href=""><br/><br/><br/>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[8].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[8].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[8].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[9].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[9].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[9].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[10].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[10].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[10].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[11].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[11].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[11].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[12].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[12].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[12].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[13].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[13].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[13].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[14].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[14].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[14].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInWeek[15].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInWeek[15].title}}</div>
-							<div style="font-size:12;color:white">{{RankInWeek[15].author}}</div>
-							</div>
-					</a>				            	
-				</div>	
-				
-			</div>     
-			<span class="line"></span>
-			<div class="swiper-button-next"> &gt; </div>
-			<div class="swiper-button-prev"> &lt;</div>	
+    <div class="section index-sec4">
+        <div class="swiper-container animated" id="swiper2">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
 
-	</div>			
-</div>
+                    <a href="">
+                        <br /><br /><br />
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[0].address}}>
+                                <img src="{{RankInWeek[0].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[0].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[0].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[1].address}}>
+                                <img src="{{RankInWeek[1].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[1].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[1].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[2].address}}>
+                                <img src="{{RankInWeek[2].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[2].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[2].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[3].address}}>
+                                <img src="{{RankInWeek[3].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[3].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[3].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[4].address}}>
+                                <img src="{{RankInWeek[4].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[4].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[4].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[5].address}}>
+                                <img src="{{RankInWeek[5].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[5].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[5].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[6].address}}>
+                                <img src="{{RankInWeek[6].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[6].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[6].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[7].address}}>
+                                <img src="{{RankInWeek[7].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[7].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[7].author}}</div>
+                        </div>
+                    </a>
+                </div>
 
+                <div class="swiper-slide">
 
+                    <a href="">
+                        <br /><br /><br />
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[8].address}}>
+                                <img src="{{RankInWeek[8].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[8].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[8].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[9].address}}>
+                                <img src="{{RankInWeek[9].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[9].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[9].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[10].address}}>
+                                <img src="{{RankInWeek[10].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[10].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[10].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[11].address}}>
+                                <img src="{{RankInWeek[11].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[11].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[11].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[12].address}}>
+                                <img src="{{RankInWeek[12].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[12].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[12].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[13].address}}>
+                                <img src="{{RankInWeek[13].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[13].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[13].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[14].address}}>
+                                <img src="{{RankInWeek[14].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[14].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[14].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInWeek[15].address}}>
+                                <img src="{{RankInWeek[15].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInWeek[15].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInWeek[15].author}}</div>
+                        </div>
+                    </a>
+                </div>
 
-<div class="section index-sec4">
-	<div class="swiper-container animated" id="swiper1">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-									
-					<a href="">
-							<br/><br/><br/>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[0].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[0].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[0].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[1].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[1].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[1].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[2].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[2].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[2].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[3].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[3].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[3].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[4].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[4].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[4].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[5].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[5].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[5].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[6].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[6].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[6].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[7].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[7].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[7].author}}</div>
-							</div>
-					</a>				            	
-				</div>	
+            </div>
+            <span class="line"></span>
+            <div class="swiper-button-next"> &gt; </div>
+            <div class="swiper-button-prev"> &lt;</div>
 
-				<div class="swiper-slide">
-													
-					<a href=""><br/><br/><br/>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[0].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[0].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[0].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[1].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[1].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[1].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[2].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[2].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[2].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[3].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[3].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[3].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[4].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[4].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[4].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[5].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[5].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[5].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[6].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[6].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[6].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{RankInMonth[7].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{RankInMonth[7].title}}</div>
-							<div style="font-size:12;color:white">{{RankInMonth[7].author}}</div>
-							</div>
-					</a>				            	
-				</div>	
-			</div>   
-			<input type="submit" value="换一个tag" onclick ="change_painter()"">	
-			<br><br><br>  
-			<span class="line"></span>
-			<div class="swiper-button-next"> &gt; </div>
-			<div class="swiper-button-prev"> &lt;</div>	
-
-			</div>
-			
-			
+        </div>
+    </div>
 
 
-				
-	</div>			
-</div>
+    <div class="section index-sec4">
+        <div class="swiper-container animated" id="swiper1">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+
+                    <a href="">
+                        <br /><br /><br />
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[0].address}}>
+                                <img src="{{RankInMonth[0].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[0].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[0].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[1].address}}>
+                                <img src="{{RankInMonth[1].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[1].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[1].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[2].address}}>
+                                <img src="{{RankInMonth[2].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[2].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[2].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[3].address}}>
+                                <img src="{{RankInMonth[3].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[3].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[3].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[4].address}}>
+                                <img src="{{RankInMonth[4].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[4].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[4].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[5].address}}>
+                                <img src="{{RankInMonth[5].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[5].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[5].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[6].address}}>
+                                <img src="{{RankInMonth[6].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[6].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[6].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[7].address}}>
+                                <img src="{{RankInMonth[7].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[7].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[7].author}}</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="swiper-slide">
+
+                    <a href="">
+                        <br /><br /><br />
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[0].address}}>
+                                <img src="{{RankInMonth[0].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[0].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[0].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[1].address}}>
+                                <img src="{{RankInMonth[1].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[1].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[1].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[2].address}}>
+                                <img src="{{RankInMonth[2].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[2].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[2].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[3].address}}>
+                                <img src="{{RankInMonth[3].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[3].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[3].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[4].address}}>
+                                <img src="{{RankInMonth[4].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[4].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[4].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[5].address}}>
+                                <img src="{{RankInMonth[5].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[5].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[5].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[6].address}}>
+                                <img src="{{RankInMonth[6].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[6].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[6].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{RankInMonth[7].address}}>
+                                <img src="{{RankInMonth[7].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{RankInMonth[7].title}}</div>
+                            <div style="font-size:12;color:white">{{RankInMonth[7].author}}</div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+            <span class="line"></span>
+            <div class="swiper-button-next"> &gt; </div>
+            <div class="swiper-button-prev"> &lt;</div>
+
+        </div>
+    </div>
 
 
-<script src="http://www.5imoban.net/download/jquery/jquery-1.8.3.min.js"></script>
-<script src="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.js"></script>
-<script src="js/banner.js"></script>
-<script src="js/index.js"></script>
-<script src="js/plugin.js"></script>		
-<script src="http://www.5imoban.net/download/fullPage/fullPage-2.7.1.min.js"></script>
-<script src="js/more.js"></script>
-<script>			
 
-	
-	
-	
-	var swiper = new Swiper('#swiper1', {
-		loop:true,
-		loopedSlides:3,
-		spaceBetween:80,
-		centeredSlides:true,
-		slidesPerView : 'auto',
-        pagination: '.swiper-pagination',
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev',
-        breakpoints: { 				   
-		    1600: {
-		      spaceBetween:40,
-		    }
-	     }
-	  });  
-	
-	 var swiper = new Swiper('#swiper2',{				
-		loop:true,
-		loopedSlides:3,
-		spaceBetween:80,
-		centeredSlides:true,
-		slidesPerView : 'auto',
-        pagination: '.swiper-pagination',
-        nextButton: '.swiper-button-next',
-        prevButton: '.swiper-button-prev',
-        breakpoints: { 				   
-		    1600: {
-		      spaceBetween:40,
-		    }
-	     }
-	  });  
-	
-</script>
+
+
+
+    </div>
+    </div>
+
+
+    <script src="http://www.5imoban.net/download/jquery/jquery-1.8.3.min.js"></script>
+    <script src="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.js"></script>
+    <script src="js/banner.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/plugin.js"></script>
+    <script src="http://www.5imoban.net/download/fullPage/fullPage-2.7.1.min.js"></script>
+    <script src="js/more.js"></script>
+    <script>
+
+
+
+
+        var swiper = new Swiper('#swiper1', {
+            loop: true,
+            loopedSlides: 3,
+            spaceBetween: 80,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            pagination: '.swiper-pagination',
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',
+            breakpoints: {
+                1600: {
+                    spaceBetween: 40,
+                }
+            }
+        });
+
+        var swiper = new Swiper('#swiper2', {
+            loop: true,
+            loopedSlides: 3,
+            spaceBetween: 80,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            pagination: '.swiper-pagination',
+            nextButton: '.swiper-button-next',
+            prevButton: '.swiper-button-prev',
+            breakpoints: {
+                1600: {
+                    spaceBetween: 40,
+                }
+            }
+        });
+
+    </script>
 </body>
 </html>
