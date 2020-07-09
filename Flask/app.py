@@ -6,6 +6,8 @@ from sys import path
 path.append('..')
 path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
 
+
+from MyScrapyProject.MyScrapyProject.spiders.StarSpider import ScrapyForUserStarClass
 from MyScrapyProject.MyScrapyProject.MysqlRW import *
 from flask_moment import Moment
 from flask import Flask
@@ -20,7 +22,13 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=5)
 Moment(app)
 
 UserAccount={}
-
+NowRemTag=3
+LikedTags={}
+LikedTagsForBing={}
+bingName=[]
+bingName=[]
+PicList1=[]
+PicList2=[]
 
 @app.route('/')
 def JumpToIndex():
@@ -31,16 +39,45 @@ def JumpToIndex():
 # 用来显示当前登录的用户，同时为用来确定是否绑定了Pix账号
 @app.route('/index/<UserId>')
 def index(UserId):
+    global UserAccount 
+    global NowRemTag
+    global LikedTagsForBing
+    global LikedTags
+    global bingName
+    global bingNum
+    
+    bingName=[]
+    bingNum=[]
+    print(1)
+    LikedTagsForBing = SQLOS.GetMostTag(int(UserId),10)
+    LikedTags = SQLOS.GetMostTag(int(UserId),20)
     UserAccount = SQLOS.GetUserAccount(UserId)
+    print(len(LikedTagsForBing))
+    print(len(LikedTags))
+    for k,v in LikedTagsForBing.items():
+        bingName.append(k)
+        bingNum.append(int(v))
+        print(k,v)
 
     return render_template('index.html', UserAccount=UserAccount)
 
-
+@app.route('/bingtu/<userid>')
+def BingTu(userid):
+    
+    global bingName
+    global bingNum
+    global UserAccount 
+    return render_template('bingtu.html',bingName = bingName,bingNum=bingNum, UserAccount=UserAccount)
 @app.route('/BindPixivID/<userid>,<pixid>')
 def BindPixivID(userid, pixid):
     pixid = int(pixid)
     userid = int(userid)
-    SQLOS.ChangeUserPixiv(userid, pixid)
+    
+    SQLOS.ChangeUserPixiv(userid, pixid,'0')
+    UserAccount = SQLOS.GetUserAccount(userid)
+    spider = ScrapyForUserStarClass()
+    spider.GetUserStarPics(userid,pixid)
+    return redirect('http://127.0.0.1:19990/index/' + str(userid))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -55,7 +92,6 @@ def register():
 
 @app.route('/status/<userid>')
 def status(userid):
-    UserAccount = SQLOS.GetUserAccount(userid)
     if UserAccount.get('PixivID')==0:
         return render_template('status.html', UserAccount=UserAccount)
     return redirect('http://127.0.0.1:19990/status1/' + userid)
@@ -63,33 +99,71 @@ def status(userid):
 
 @app.route('/person/<userid>')
 def person(userid):
-    UserAccount = SQLOS.GetUserAccount(userid)
+    global UserAccount 
     return render_template('person.html', UserAccount=UserAccount)
 
 
 @app.route('/list/<userid>')
 def list(userid):
-    UserAccount = SQLOS.GetUserAccount(userid)
+    
+    global UserAccount 
+    
+    
+
     return render_template('list.html', UserAccount=UserAccount)
 
-
+############################################最后一项
 @app.route('/recommend/<userid>')
 def recommend(userid):
-    UserAccount = SQLOS.GetUserAccount(userid)
-    return render_template('recommend.html', UserAccount=UserAccount)
+    
+    global LikedTagsForBing
+    global LikedTags
+    global NowRemTag
+    global UserAccount 
+    TagsForRem=[]
+    for tagdic,v in LikedTags.items():
+        TagsForRem.append(tagdic)
+    if NowRemTag>16:
+        NowRemTag=0
+    print(TagsForRem[NowRemTag])
+    PicList1 = SQLOS.GetImageIdlist(TagsForRem[NowRemTag],20)
+    for p in range(0,19):
+        if len(PicList1[p]['title'])>6:
+            PicList1[p]['title'] = PicList1[p]['title'][:6]+'...'
+        if len(PicList1[p]['author'])>6:
+            PicList1[p]['author'] = PicList1[p]['author'][:6]+'...'
+        PicList1[p]['ID']=str(PicList1[p]['ID'])+"_p0_square1200.jpg"
+        print(PicList1[p]['ID'])
+    print(len(PicList1))
+    NowRemTag+=1
+    print(TagsForRem[NowRemTag])
+    PicList2 = SQLOS.GetImageIdlist(TagsForRem[NowRemTag],20)
+    for p in range(0,19):
+        if len(PicList2[p]['title'])>6:
+            PicList2[p]['title'] = PicList1[p]['title'][:6]+'...'
+        if len(PicList2[p]['author'])>6:
+            PicList2[p]['author'] = PicList2[p]['author'][:6]+'...'
+        PicList2[p]['ID']=str(PicList2[p]['ID'])+"_p0_square1200.jpg"
+        print(PicList1[p]['ID'])
+    NowRemTag+=1
+    print(len(PicList2))
+    
+    return render_template('recommend.html', UserAccount=UserAccount,PicList1=PicList1,PicList2=PicList2)
 
 @app.route('/personinfoedit')
 def perinfoedit():
     return render_template('personal_infoedit.html')
 
 
-@app.route('/idedit')
-def id_edit():
-    return render_template('id_edit.html')
+@app.route('/idedit/<userid>')
+def id_edit(userid):
+    
+    global UserAccount 
+    return render_template('id_edit.html',UserAccount=UserAccount)
 
 @app.route('/status1/<userid>')
 def status1(userid):
-    UserAccount = SQLOS.GetUserAccount(userid)
+    global UserAccount 
     return render_template('status1.html', UserAccount=UserAccount)
 
 
@@ -122,13 +196,13 @@ def download(PicID):
 # 跳转到这个页面之后 就在数据库中检查是否有重复并加入数据库
 # 成功注册后，就跳转到为这个用户呈现的主页面中
 @app.route('/submittRegister/<Name>,<Pswd>')
-def submittRegister(name, pswd):
-    UserId = SQLOS.UserRegist(name, pswd)
+def submittRegister(Name, Pswd):
+    UserId = SQLOS.UserRegist(Name, Pswd)
     if (UserId == -1):
         return render_template('NameHasBeenRegistered.html')
     if (UserId == 0):
         return render_template('SomeThingWrongWithSQL.html')
-    return redirect('127.0.0.1:19990/index/' + str(UserId))
+    return redirect('http://127.0.0.1:19990/index/' + str(UserId))
 
 
 @app.route('/time')

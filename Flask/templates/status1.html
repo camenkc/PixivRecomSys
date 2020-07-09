@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title>基于pixiv的画师推荐平台</title>
+<title>pixiv收藏分析与图片推荐平台</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
@@ -18,6 +18,7 @@
 <div class="index-header clearfix">
 	<div class="index-logo fl">
 		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a> 
+		<br/>{{UserAccount.Username}}
 	</div>
 	<ul class="index-nav fl">
 		<li><a href="/index/{{UserAccount.ID}}">首页</a></li>
@@ -25,7 +26,7 @@
 		<li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
 		<li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
 		<li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
-		<li><a href="https://www.baidu.com">联系我们</a></li>
+		<li><a href="/bingtu/{{UserAccount.ID}}">最爱的Tags</a></li>
 	</ul>
 	<div class="index-header-right fr">
 		<a href="" class="search-btn">搜索</a>	

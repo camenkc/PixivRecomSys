@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title>基于pixiv的画师推荐平台</title>
+<title>pixiv收藏分析与图片推荐平台</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
@@ -16,6 +16,7 @@
 <div class="index-header clearfix">
 	<div class="index-logo fl">
 		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a> 
+		<br/>{{UserAccount.Username}}
 	</div>
 	<ul class="index-nav fl">
 		<li><a href="/index/{{UserAccount.ID}}">首页</a></li>
@@ -23,7 +24,7 @@
 		<li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
 		<li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
 		<li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
-		<li><a href="https://www.baidu.com">联系我们</a></li>
+		<li><a href="/bingtu/{{UserAccount.ID}}">最爱的Tags</a></li>
 	</ul>
 	<div class="index-header-right fr">
 		<a href="" class="search-btn">搜索</a>	
@@ -49,88 +50,273 @@
 </div>	
 <!--search_sec end-->
 
+<div class="section index-sec4">
+	<div class="swiper-container animated" id="swiper2">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+									
+					<a href="">
+							<br/><br/><br/>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+					</a>				            	
+				</div>	
+
+				<div class="swiper-slide">
+													
+					<a href=""><br/><br/><br/>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+					</a>				            	
+				</div>	
+				
+			</div>     
+			<span class="line"></span>
+			<div class="swiper-button-next"> &gt; </div>
+			<div class="swiper-button-prev"> &lt;</div>	
+
+		
+			<input type="submit" value="换一个tag" onclick ="change_tag()">
+		
+
+	</div>			
+</div>
 
 
-<div id="bloc">
-	<article id="index">
-		<div class="banner-position">			
-						<img src="{{ url_for('static',filename ='images/mybg1.jpg')}} " >
-				</div>	  
-				
-				<div class="banner-wave">
-					<svg viewBox="0 0 120 16">
-				
-						<defs>
-				
-							<filter id="goo">
-				
-								<feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur" />
-				
-								<feColorMatrix in="blur" mode="matrix" values="
-				
-								   1 0 0 0 0  
-								
-								   0 1 0 0 0  
-								
-								   0 0 1 0 0  
-								
-								   0 0 0 13 -9" result="goo" />
-				
-								<xfeBlend in="SourceGraphic" in2="goo" />
-				
-							</filter>
-				
-							<path id="wave" d="M 0,10 C 30,10 30,15 60,15 90,15 90,10 120,10 150,10 150,15 180,15 210,15 210,10 240,10 v 28 h -240 z" />
-				
-						</defs>
-				
-						<use id="wave3" class="wave" xlink:href="#wave" x="0" y="-2"></use>
-				
-						<use id="wave2" class="wave" xlink:href="#wave" x="0" y="0"></use>
-				
-						<g class="gooeff" filter="url(#goo)">
-				
-							<circle class="drop drop1" cx="20" cy="2" r="8.8" />
-				
-							<circle class="drop drop2" cx="25" cy="2.5" r="7.5" />
-				
-							<circle class="drop drop3" cx="16" cy="2.8" r="9.2" />
-				
-							<circle class="drop drop4" cx="18" cy="2" r="8.8" />
-				
-							<circle class="drop drop5" cx="22" cy="2.5" r="7.5" />
-				
-							<circle class="drop drop6" cx="26" cy="2.8" r="9.2" />
-				
-							<circle class="drop drop1" cx="5" cy="4.4" r="8.8" />
-				
-							<circle class="drop drop2" cx="5" cy="4.1" r="7.5" />
-				
-							<circle class="drop drop3" cx="8" cy="3.8" r="9.2" />
-				
-							<circle class="drop drop4" cx="3" cy="4.4" r="8.8" />
-				
-							<circle class="drop drop5" cx="7" cy="4.1" r="7.5" />
-				
-							<circle class="drop drop6" cx="10" cy="4.3" r="9.2" />
-				
-							<circle class="drop drop1" cx="1.2" cy="5.4" r="8.8" />
-				
-							<circle class="drop drop2" cx="5.2" cy="5.1" r="7.5" />
-				
-							<circle class="drop drop3" cx="10.2" cy="5.3" r="9.2" />
-				
-							<circle class="drop drop4" cx="3.2" cy="5.4" r="8.8" />
-				
-							<circle class="drop drop5" cx="14.2" cy="5.1" r="7.5" />
-				
-							<circle class="drop drop6" cx="17.2" cy="4.8" r="9.2" />
-				
-							<use id="wave1" class="wave" xlink:href="#wave" x="0" y="1" />
-				
-						</g>
-					</svg>
-				</div>
+
+<div class="section index-sec4">
+	<div class="swiper-container animated" id="swiper1">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+									
+					<a href="">
+							<br/><br/><br/>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+					</a>				            	
+				</div>	
+
+				<div class="swiper-slide">
+													
+					<a href=""><br/><br/><br/>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">画师xxx</div>
+							<div style="font-size:12;color:white">xxx</div>
+							</div>
+					</a>				            	
+				</div>	
+			</div>   
+			<input type="submit" value="换一个tag" onclick ="change_painter()"">	
+			<br><br><br>  
+			<span class="line"></span>
+			<div class="swiper-button-next"> &gt; </div>
+			<div class="swiper-button-prev"> &lt;</div>	
+
 			</div>
+			
+			
+
+
+				
+	</div>			
+</div>
+
+
+<script src="http://www.5imoban.net/download/jquery/jquery-1.8.3.min.js"></script>
+<script src="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.js"></script>
+<script src="js/banner.js"></script>
+<script src="js/index.js"></script>
+<script src="js/plugin.js"></script>		
+<script src="http://www.5imoban.net/download/fullPage/fullPage-2.7.1.min.js"></script>
+<script src="js/more.js"></script>
+<script>			
+
+	
+	
+
+	function change_tag(){
+		alert ("测试成功");
+	}
+
+	function change_painter(){
+		alert ("测试成功");
+	}
+
+	
+	var swiper = new Swiper('#swiper1', {
+		loop:true,
+		loopedSlides:3,
+		spaceBetween:80,
+		centeredSlides:true,
+		slidesPerView : 'auto',
+        pagination: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        breakpoints: { 				   
+		    1600: {
+		      spaceBetween:40,
+		    }
+	     }
+	  });  
+	
+	 var swiper = new Swiper('#swiper2',{				
+		loop:true,
+		loopedSlides:3,
+		spaceBetween:80,
+		centeredSlides:true,
+		slidesPerView : 'auto',
+        pagination: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        breakpoints: { 				   
+		    1600: {
+		      spaceBetween:40,
+		    }
+	     }
+	  });  
+	
+</script>
 </body>
 </html>

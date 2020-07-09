@@ -33,10 +33,8 @@ class ScrapyForPicTagsClass():
             print(e)
         tagList=[]
         for value in illusetWithTag:
-            tagList.append(value['tag'])
             trans=value.get('translation')
-            if isinstance(trans,dict):
-                tagList.append(trans['en'])
+            tagList.append(value['tag'])
         for tmp in tagList:
             print(tmp)
         return tagList

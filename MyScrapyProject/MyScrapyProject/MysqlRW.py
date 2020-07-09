@@ -1,13 +1,17 @@
-from MyScrapyProject.items import UserAccount
+import sys
+import os
+from sys import path
+path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
+from MyScrapyProject.MyScrapyProject.items import UserAccount
 from itemadapter import ItemAdapter
 from json import load
 from urllib.request import urlopen
 import pymysql.cursors
 
 import datetime
-from MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
+from MyScrapyProject.MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
-from MyScrapyProject.pixivpymaster.pixivpy3 import *
+from pixivpy3 import *
 
 class MYF():
     def __init__(self):
@@ -151,15 +155,16 @@ class SQLOS():
             cursor.execute(sql_write,(UserAccount.get("PixivID",""),UserAccount.get("Pixivpw",""),UserAccount.get("Username",""),UserAccount.get("Userpw",""),UserAccount.get("Usermode",""),UserAccount.get("Create_date",""),UserAccount.get("Lastlogindate",""),UserAccount.get("Lastloginip",""),UserAccount.get("Logincount","")))
             cursor.execute("SELECT LAST_INSERT_ID() from d_user_account as ID")
             flag=cursor.fetchall()
-           
+            userid=flag[0]['LAST_INSERT_ID()']
             print(db)
             db.commit()
             db.close()
-            SQLOS.WritetoLog(flag[0]['LAST_INSERT_ID()'],1,"注册成功!")
+            
+            SQLOS.WritetoLog(userid,1,"注册成功!")
             
       
            
-            return 1
+            return userid
         except:
            
             db.rollback()
@@ -199,6 +204,7 @@ class SQLOS():
     def EditUserAccount(ID,UserAccount):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
+        
         if cursor.execute("SELECT * from d_user_account WHERE `ID`=%s",ID):
 
              try:
@@ -209,7 +215,7 @@ class SQLOS():
                 db.rollback()
                 return 0
         else:
-            return -1#更改制定ID的用户账户信息，传入一个UserAccount的类，成功返回1，失败返回0，未找到ID返回-1
+            return -1#更改制定ID的用户账户信息，传入一个UserAccount的类，成功返回1，失败返回0，未找到ID或者有重名返回-1
 
 
     def UserRegist(UserName,Userpw):
@@ -223,8 +229,8 @@ class SQLOS():
             NewUser['Userpw']=Userpw
             NewUser['Usermode']=0
             NewUser['Create_date']=datetime.datetime.today()
-            SQLOS.AddUserAccount(NewUser)
-            return 1
+            
+            return SQLOS.AddUserAccount(NewUser)
             # 如果注册成功返回UserID 写入失败返回0 账号名已存在返回-1
     def UserLogin(UserName,Userpw):
         db=SQLOS.Connect_to_DB()
@@ -250,9 +256,15 @@ class SQLOS():
         useraccount=SQLOS.GetUserAccount(UserID)
         useraccount['Username']=Username
         useraccount['Userpw']=Userpw
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        if cursor.execute("SELECT * FROM d_user_account WHERE`Username`=%s ",Username):
+            return -1
         SQLOS.EditUserAccount(UserID,useraccount)
         SQLOS.WritetoLog(UserID,2,"修改账户密码")
-        #更改用户账号密码
+        #更改用户账号密码 如果账户名重复返回-1
+    #def 
+
     def AddStarImage(Userid,Imageid):
         if(SQLOS.CheckStarImage(Userid,Imageid)):
 
@@ -318,11 +330,23 @@ class SQLOS():
         aapi = AppPixivAPI()
         nl=[]
         aapi.login("CakeBaker.0518@gmail.com","12138ckC")
-        json_result = aapi.search_illust((tag,'5000users入り'), search_target='partial_match_for_tags')
-        for a in range(1,num):
-            illust = json_result.illusts[a]
+        if tag.find('users入り'):
+            json_result = aapi.search_illust((tag), search_target='exact_match_for_tags') 
+        else:
+            json_result = aapi.search_illust((tag+' 1000users入り'), search_target='exact_match_for_tags')   
+        for illust in json_result.illusts[:num]:
             nl.append({'ID':illust['id'],'title':illust['title'],'author':illust.user['name']})
-        return nl#输入tag名称和返回张数，返回5000收藏以上的图片信息list
+            aapi.download(illust.image_urls.square_medium,path=os.path.curdir+'/templates/recommend')
+        return nl#输入tag名称和返回张数，返回1000收藏以上的图片信息list 并把图片以ID_p0_square1200.jpg的形式储存
+    def GetRank(mode,num):
+        aapi = AppPixivAPI()
+        nl=[]
+        aapi.login("CakeBaker.0518@gmail.com","12138ckC")
+        json_result = aapi.illust_ranking(mode) 
+        for illust in json_result.illusts[:num]:
+            nl.append({'ID':illust['id'],'title':illust['title'],'author':illust.user['name']})
+            aapi.download(illust.image_urls.square_medium)
+        return nl#输入排行榜模式(day week month)和返回张数的排行榜图片信息list 并把图片以ID_p0_square1200.jpg的形式储存
     def GetUserStarImage(ID):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -346,17 +370,23 @@ class SQLOS():
         else:
             return -1#得到指定ID的关注用户列表，返回一个list
     def ChangeUserPixiv(ID,pixivID,pixivpw):
+        
         User=SQLOS.GetUserAccount(ID)
         User['PixivID']=pixivID
         User['Pixivpw']=pixivpw
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        if cursor.execute("SELECT * FROM d_user_account WHERE`PixivID`=%s",pixivID):
+            return -1
+
         SQLOS.EditUserAccount(ID,User)
-        SQLOS.WritetoLog(ID,3,("修改绑定P站账号为 %s"%pixivID))#更改账户绑定p站账户，并向日志中写入一条记录
+        SQLOS.WritetoLog(ID,3,("修改绑定P站账号为 %s"%pixivID))#更改账户绑定p站账户，并向日志中写入一条记录 账户重复返回-1
     def SwitchUserMode(ID):
         User=SQLOS.GetUserAccount(ID)
         User['Usermode']=not User['Usermode']
         SQLOS.EditUserAccount(ID,User) #更改用户模式
         SQLOS.WritetoLog(ID,2,("修改账户类型为 %s"% (not User['Usermode'])))#更改账户类型
-    def GetMostTag(Userid,num):
+    def GetMostTag(UserID,num):
         usertag=SQLOS.GetUserTagDic(UserID)
         taglist=SQLOS.GetTagDict_rev()
         #print (taglist)

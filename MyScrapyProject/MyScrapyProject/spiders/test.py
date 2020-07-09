@@ -7,4 +7,4 @@ import sys
 from MyScrapyProject.MyScrapyProject.spiders.StarSpider import ScrapyForUserStarClass
 
 Spider=ScrapyForUserStarClass()
-Spider.GetUserStarPics(2,56346048)
+Spider.GetUserStarPics(5,56346048)

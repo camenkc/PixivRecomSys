@@ -1,0 +1,108 @@
+﻿
+<!DOCTYPE html>
+<html style="height: 100%">
+ 
+	<head>
+		<meta charset="utf-8">
+	</head>
+ 
+	<body style="height: 100%; margin: 0">
+		<div id="container" style="height: 100%"></div>
+		<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+		<script type="text/javascript">
+			var dom = document.getElementById("container");
+			var myChart = echarts.init(dom);
+			var app = {};
+			
+			app.title = '环形图';
+ 
+			var option = {
+				tooltip: {
+					trigger: 'item',
+					formatter: "{a} <br/>{b}: {c} ({d}%)"
+				},
+				color:['#93D8A9','#FFB99D','#AF7DCC','#FFD83D','#bbe2e8'],
+				legend: {
+					orient: 'horizontal',
+					x: 'left',
+					data: ['{{bingName[0]}}', '{{bingName[1]}}', '{{bingName[2]}}', '{{bingName[3]}}', '{{bingName[4]}}', '{{bingName[5]}}', '{{bingName[6]}}', '{{bingName[7]}}', '{{bingName[8]}}']
+				},
+				series: [{
+					name: '最喜欢的Tags',
+					type: 'pie',
+					radius: ['30%', '70%'],
+					avoidLabelOverlap: false,
+					label: {
+						normal: {
+							show: false,
+							position: 'center'
+						},
+						emphasis: {
+							show: true,
+							textStyle: {
+								fontSize: '30',
+								fontWeight: 'bold'
+							}
+						}
+					},
+					labelLine: {
+						normal: {
+							show: false
+						}
+					},
+					data: [{
+							value: '{{bingNum[0]}}',
+							name: '{{bingName[0]}}'
+						},
+						{
+							value: '{{bingNum[1]}}',
+							name: '{{bingName[1]}}'
+						},
+						{
+							value: '{{bingNum[2]}}',
+							name: '{{bingName[2]}}'
+						},
+						{
+							value: '{{bingNum[3]}}',
+							name: '{{bingName[3]}}'
+						},
+						{
+							value: '{{bingNum[4]}}',
+							name: '{{bingName[4]}}'
+						},
+						{
+							value: '{{bingNum[5]}}',
+							name: '{{bingName[5]}}'
+						},
+						{
+							value: '{{bingNum[6]}}',
+							name: '{{bingName[6]}}'
+						},
+						{
+							value: '{{bingNum[7]}}',
+							name: '{{bingName[7]}}'
+						},
+						{
+							value: '{{bingNum[8]}}',
+							name: '{{bingName[8]}}'
+						}
+					]
+				}]
+			};
+			if(option && typeof option === "object") {
+				myChart.setOption(option, true);
+			}
+		</script>
+		
+		<div style="text-align:center">
+			<br><button class = "login-button" onclick = "goBack()">回到主页</button>
+		 </div>
+		 	<script type="text/javascript">
+		function goBack(){
+			window.location.href = '/index/{{UserAccount.ID}}';
+		}
+	</script>
+		 
+	</body>
+ 
+</html>

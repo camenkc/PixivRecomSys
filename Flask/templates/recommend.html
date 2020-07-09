@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title>基于pixiv的画师推荐平台</title>
+<title>pixiv收藏分析与图片推荐平台</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
@@ -10,12 +10,14 @@
 <link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
 <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css"/>
 <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css"/>
+
 </head>
 	
 <body>
 <div class="index-header clearfix">
 	<div class="index-logo fl">
 		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a> 
+		<br/>{{UserAccount.Username}}
 	</div>
 	<ul class="index-nav fl">
 		<li><a href="/index/{{UserAccount.ID}}">首页</a></li>
@@ -23,7 +25,7 @@
 		<li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
 		<li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
 		<li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
-		<li><a href="https://www.baidu.com">联系我们</a></li>
+		<li><a href="/bingtu/{{UserAccount.ID}}">最爱的Tags</a></li>
 	</ul>
 	<div class="index-header-right fr">
 		<a href="" class="search-btn">搜索</a>	
@@ -55,20 +57,89 @@
 				<div class="swiper-slide">
 									
 					<a href="">
-						<p>根据tagxxxx向您推荐</p>
+							<br/><br/><br/>
+							<div style="float:left;margin-left:10px">
+							<img src="{{PicList1[0].ID}}" width="130" height="130"/>
+							<div style="font-size:12;color:white">{{PicList1[0].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[0].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
 							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
-							<div style="font-size:12;color:#000">画师xxx</div>
-							<br><div style="font-size:12;color:#000">xxx</div>
+							<div style="font-size:12;color:white">{{PicList1[1].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[1].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[2].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[2].author}}</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[3].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[3].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[4].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[4].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[5].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[5].author}}</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[6].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[6].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[7].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[7].author}}</div>
+							</div>
 					</a>				            	
 				</div>	
 
 				<div class="swiper-slide">
 													
-					<a href="">
-						<p>根据xxxx向您推荐2</p>
-						<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
-						<div style="font-size:12;color:#000">画师xxx</div>
-						<br><div style="font-size:12;color:#000">xxx</div>
+					<a href=""><br/><br/><br/>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[8].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[8].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[9].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[9].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[10].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[10].author}}</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[11].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[11].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[12].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[12].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[13].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[13].author}}</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[14].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[14].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList1[15].title}}</div>
+							<div style="font-size:12;color:white">{{PicList1[15].author}}</div>
+							</div>
 					</a>				            	
 				</div>	
 				
@@ -77,8 +148,6 @@
 			<div class="swiper-button-next"> &gt; </div>
 			<div class="swiper-button-prev"> &lt;</div>	
 
-		
-			<input type="submit" value="换一个tag" onclick ="change_tag()">
 		
 
 	</div>			
@@ -92,35 +161,101 @@
 				<div class="swiper-slide">
 									
 					<a href="">
-						<p>根据tagxxxx向您推荐</p>
+							<br/><br/><br/>
+							<div style="float:left;margin-left:10px">
 							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
-							<div style="font-size:12;color:#000">画师xxx</div>
-							<br><div style="font-size:12;color:#000">xxx</div>
+							<div style="font-size:12;color:white">{{PicList2[0].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[0].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[1].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[1].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[2].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[2].author}}</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[3].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[3].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[4].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[4].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[5].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[5].author}}</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[6].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[6].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[7].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[7].author}}</div>
+							</div>
 					</a>				            	
 				</div>	
 
 				<div class="swiper-slide">
 													
-					<a href="">
-						<p>根据xxxx向您推荐2</p>
-						<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
-						<div style="font-size:12;color:#000">画师xxx</div>
-						<br><div style="font-size:12;color:#000">xxx</div>
+					<a href=""><br/><br/><br/>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[8].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[8].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[9].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[9].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[10].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[10].author}}</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[11].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[11].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[12].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[12].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[13].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[13].author}}</div>
+							</div><div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[14].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[14].author}}</div>
+							</div>
+							<div style="float:left;margin-left:10px">
+							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
+							<div style="font-size:12;color:white">{{PicList2[15].title}}</div>
+							<div style="font-size:12;color:white">{{PicList2[15].author}}</div>
+							</div>
 					</a>				            	
 				</div>	
-
-				
-			</div>     
+			</div>   
+			<input type="submit" value="换一个tag" onclick ="change_painter()"">	
+			<br><br><br>  
 			<span class="line"></span>
 			<div class="swiper-button-next"> &gt; </div>
 			<div class="swiper-button-prev"> &lt;</div>	
 
 			</div>
-			<input type="submit" value="换一个画师" onclick ="change_painter()"">	
-			<br><br><br>
-			<span class="line"></span>
-			<div class="swiper-button-next"> &gt; </div>
-			<div class="swiper-button-prev"> &lt;</div>	
+			
+			
 
 
 				
@@ -143,12 +278,8 @@
 	
 	
 
-	function change_tag(){
-		alert ("测试成功");
-	}
-
 	function change_painter(){
-		alert ("测试成功");
+		window.location.href = '/recommend/{{UserAccount.ID}}';
 	}
 
 	
@@ -183,6 +314,7 @@
 		    }
 	     }
 	  });  
+	
 	
 </script>
 </body>

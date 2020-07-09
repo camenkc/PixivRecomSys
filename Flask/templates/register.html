@@ -10,7 +10,6 @@
 				var username = document.getElementById("username").value;
 				var password = document.getElementById("password").value;
                 var repeat_pwd = document.getElementById("repeat_pwd").value;
-                var pixiv_name = document.getElementById("pixiv_name").value;
 
 
 				if(username == "" || password == "" || repeat_pwd == "" ) {
@@ -27,7 +26,7 @@
                 }
                 
             }
-		}
+		
 		</script>
 	</head>
 
@@ -42,10 +41,10 @@
 				<input type="password" id="password" name="password" placeholder="Your password">
 				
 				<input type="password" id="repeat_pwd" name="repeat_pwd" placeholder="Repeat your password">
-				
+				<!--
 				<input type="text" id="pixiv_name" name="pixiv_name" placeholder="Your pixiv ID(Optional)">
 				
-				<!--<input type="password" id="pixiv_pwd" name="pixiv_pwd" placeholder="Your pixiv pwd(Optional)">
+				<input type="password" id="pixiv_pwd" name="pixiv_pwd" placeholder="Your pixiv pwd(Optional)">
 				-->
 				<input type="button" class = "button" value="注册" onclick = "register()">
 				

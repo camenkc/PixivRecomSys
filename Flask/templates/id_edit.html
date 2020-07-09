@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title>基于pixiv的画师推荐平台</title>
+<title>pixiv收藏分析与图片推荐平台</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
@@ -18,6 +18,7 @@
 <div class="index-header clearfix">
 	<div class="index-logo fl">
 		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a> 
+		<br/>{{UserAccount.Username}}
 	</div>
 	<ul class="index-nav fl">
 		<li><a href="/index/{{UserAccount.ID}}">首页</a></li>
@@ -25,7 +26,7 @@
 		<li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
 		<li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
 		<li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
-		<li><a href="https://www.baidu.com">联系我们</a></li>
+		<li><a href="/bingtu/{{UserAccount.ID}}">最爱的Tags</a></li>
 	</ul>
 	<div class="index-header-right fr">
 		<a href="" class="search-btn">搜索</a>	
@@ -66,12 +67,12 @@
 
 <tr>
 
-<td style="background: salmon">账号</td>
+<td style="background: salmon">PixivID</td>
 
-<td><input type="text" style="width:95%"></td>
+<td><input id="pixId" type="text" style="width:95%"></td>
 
 </tr>
-
+<!--
 <tr>
 
 <td style="background: salmon">密码</td>
@@ -88,8 +89,8 @@
 	
 </tr>
 
+-->
 </table>
-
 
 <div style="text-align:center">
   <br><br><br><br><button class = "login-button" onclick = "status()">提交</button>
@@ -107,7 +108,9 @@
 
 	<script type="text/javascript">
 		function status(){
-			window.location.href = '/status';
+			var PixivID = document.getElementById("pixId").value;
+			alert("即将读取P站收藏 请耐心等待！！！！！");
+			window.location.href = '/BindPixivID/{{UserAccount.ID}},'+PixivID;
 		}
 	</script>
 
