@@ -1,7 +1,7 @@
 #使用模板，为了将数据以html文档的格式展示出来
 
 import sys
-sys.path.append('..')
+sys.path.append('../')
 from MyScrapyProject.MyScrapyProject.MysqlRW import *
 from flask_moment import Moment
 from flask import Flask

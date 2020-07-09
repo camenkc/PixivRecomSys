@@ -1,13 +1,15 @@
-from MyScrapyProject.items import UserAccount
+import sys
+sys.path.append('../')
+from MyScrapyProject.MyScrapyProject.items import UserAccount
 from itemadapter import ItemAdapter
 from json import load
 from urllib.request import urlopen
 import pymysql.cursors
 
 import datetime
-from MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
+from MyScrapyProject.MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
-from MyScrapyProject.pixivpymaster.pixivpy3 import *
+from pixivpy3 import *
 
 class MYF():
     def __init__(self):
