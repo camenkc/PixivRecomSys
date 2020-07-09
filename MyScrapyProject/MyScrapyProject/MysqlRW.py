@@ -330,14 +330,15 @@ class SQLOS():
         aapi = AppPixivAPI()
         nl=[]
         aapi.login("CakeBaker.0518@gmail.com","12138ckC")
-        if tag.find('users入り'):
-            json_result = aapi.search_illust((tag), search_target='exact_match_for_tags') 
+        if (tag.find("users入り")==-1):
+            
+            json_result = aapi.search_illust((tag+' 000users入り'), search_target='partial_match_for_tags')   
         else:
-            json_result = aapi.search_illust((tag+' 1000users入り'), search_target='exact_match_for_tags')   
+            json_result = aapi.search_illust((tag), search_target='partial_match_for_tags') 
         for illust in json_result.illusts[:num]:
             nl.append({'ID':illust['id'],'title':illust['title'],'author':illust.user['name']})
-            aapi.download(illust.image_urls.square_medium,path=os.path.curdir+'/templates/recommend')
-        return nl#输入tag名称和返回张数，返回1000收藏以上的图片信息list 并把图片以ID_p0_square1200.jpg的形式储存
+            aapi.download(illust.image_urls.square_medium,path=os.path.curdir+'/static/images')    
+        return nl
     def GetRank(mode,num):
         aapi = AppPixivAPI()
         nl=[]
@@ -345,7 +346,7 @@ class SQLOS():
         json_result = aapi.illust_ranking(mode) 
         for illust in json_result.illusts[:num]:
             nl.append({'ID':illust['id'],'title':illust['title'],'author':illust.user['name']})
-            aapi.download(illust.image_urls.square_medium)
+            aapi.download(illust.image_urls.square_medium,path=os.path.curdir+'/static/images')
         return nl#输入排行榜模式(day week month)和返回张数的排行榜图片信息list 并把图片以ID_p0_square1200.jpg的形式储存
     def GetUserStarImage(ID):
         db=SQLOS.Connect_to_DB()

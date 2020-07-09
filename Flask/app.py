@@ -6,11 +6,11 @@ from sys import path
 path.append('..')
 path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
 
-
+print(path)
 from MyScrapyProject.MyScrapyProject.spiders.StarSpider import ScrapyForUserStarClass
 from MyScrapyProject.MyScrapyProject.MysqlRW import *
 from flask_moment import Moment
-from flask import Flask
+from flask import Flask,Response
 from flask import render_template
 from datetime import timedelta
 from flask import redirect
@@ -102,17 +102,48 @@ def person(userid):
     global UserAccount 
     return render_template('person.html', UserAccount=UserAccount)
 
-
+@app.route('/list/static/images/<picName>')
+def listGetImage(picName):
+    image = open(os.path.curdir+"/static/images/{}".format(picName),'rb')
+    resp = Response(image, mimetype="image/jpeg")
+    return resp
 @app.route('/list/<userid>')
 def list(userid):
-    
     global UserAccount 
+    RankInWeek=[]
+    RankInMonth=[]
+    RankInWeek = SQLOS.GetRank('week',20)
+    for p in range(0,19):
+        print('p: ',p)
+        if len(RankInWeek[p]['title'])>6:
+            RankInWeek[p]['title'] = RankInWeek[p]['title'][:6]+'...'
+        if len(RankInWeek[p]['author'])>6:
+            RankInWeek[p]['author'] = RankInWeek[p]['author'][:6]+'...'
+        RankInWeek[p]['ID']='static/images/'+str(RankInWeek[p]['ID'])+"_p0_square1200.jpg"
+        print(RankInWeek[p]['ID'])
+    print('Now Catch Rank In Month')
+    RankInMonth = SQLOS.GetRank('month',10)
+    for p in range(0,10):
+        print('p: ',p)
+        if len(RankInMonth[p]['title'])>6:
+            RankInMonth[p]['title'] = RankInMonth[p]['title'][:6]+'...'
+        if len(RankInMonth[p]['author'])>6:
+            RankInMonth[p]['author'] = RankInMonth[p]['author'][:6]+'...'
+        RankInMonth[p]['ID']='static/images/'+str(RankInMonth[p]['ID'])+"_p0_square1200.jpg"
+        print(RankInMonth[p]['ID'])
     
     
 
-    return render_template('list.html', UserAccount=UserAccount)
+    return render_template('list.html', UserAccount=UserAccount,RankInWeek=RankInWeek,RankInMonth=RankInMonth)
+
 
 ############################################最后一项
+@app.route('/recommend/static/images/<picName>')
+def getRemPicture(picName):
+    image = open(os.path.curdir+"/static/images/{}".format(picName),'rb')
+    resp = Response(image, mimetype="image/jpeg")
+    return resp
+
 @app.route('/recommend/<userid>')
 def recommend(userid):
     
@@ -132,7 +163,7 @@ def recommend(userid):
             PicList1[p]['title'] = PicList1[p]['title'][:6]+'...'
         if len(PicList1[p]['author'])>6:
             PicList1[p]['author'] = PicList1[p]['author'][:6]+'...'
-        PicList1[p]['ID']=str(PicList1[p]['ID'])+"_p0_square1200.jpg"
+        PicList1[p]['ID']='static/images/'+str(PicList1[p]['ID'])+"_p0_square1200.jpg"
         print(PicList1[p]['ID'])
     print(len(PicList1))
     NowRemTag+=1
@@ -143,7 +174,7 @@ def recommend(userid):
             PicList2[p]['title'] = PicList1[p]['title'][:6]+'...'
         if len(PicList2[p]['author'])>6:
             PicList2[p]['author'] = PicList2[p]['author'][:6]+'...'
-        PicList2[p]['ID']=str(PicList2[p]['ID'])+"_p0_square1200.jpg"
+        PicList2[p]['ID']='static/images/'+str(PicList2[p]['ID'])+"_p0_square1200.jpg"
         print(PicList1[p]['ID'])
     NowRemTag+=1
     print(len(PicList2))
