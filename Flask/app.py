@@ -1,6 +1,8 @@
 #使用模板，为了将数据以html文档的格式展示出来
 
-
+import sys
+sys.path.append('..')
+from MyScrapyProject.MyScrapyProject.MysqlRW import *
 from flask_moment import Moment
 from flask import Flask
 from flask import render_template
@@ -8,7 +10,6 @@ from datetime import timedelta
 from flask import redirect
 import pymysql.cursors
 from pixivpy3 import *
-
 app = Flask(__name__) #创建一个swgi应用
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=5)
 Moment(app)
@@ -29,21 +30,19 @@ def get_conn():
 def JumpToIndex():
     return redirect('/login')
 
-@app.route('/index')
-def index():
-    '''  
-    connection = get_conn()
+#这里需求根据Userid返回一个Useraccount类型，
+#用来显示当前登录的用户，同时为用来确定是否绑定了Pix账号
+@app.route('/index/<UserId>')
+def index(UserId):
+    UserId=int(UserId)
+    UserAccount=SQLOS.GetAccountById(UserId)
+    
+    return render_template('index.html',UserAccount)
 
-    try:
-        with connection.cursor() as cursor:
-            sql = "SELECT `PixivID`, `Pixivpw`,`Username` `Userpw` FROM `d_user_account`"
-            cursor.execute(sql)
-            user_info = cursor.fetchall()
-            return render_template("index.html", user_info = user_info)
-    finally:
-        connection.close()
-        '''
-    return render_template('index.html')
+@app.route('/BindPixivID/<pixid>')
+def BindPixivID(pixid):
+    pixid=int(pixid)
+    
 
 @app.route('/login')
 def login():
@@ -69,6 +68,21 @@ def list():
 def recommend():
     return render_template('recommend.html')
 
+
+
+#检查登录信息是否正确
+#无此账户进入AccountNotFound.html(未写)
+#密码错误进入PswdIsIncorrect.html(未写)
+#登录信息正确则进入对应用户的主界面
+@app.route('/LoginCheck/<username>,<userpswd>')
+def LoginCheck(username,userpswd):
+    info = SQLOS.UserLogin(username,userpswd)
+    if info==0:
+        return render_template('AccountNotFound.html')
+    if info==-1:
+        return render_template('PswdIsIncorrect.html')
+    return redirect('127.0.0.1:19990/index/'+str(UserId))
+    
 #跳转到这个页面之后 就下载PicID这个图片
 @app.route('/download/<PicID>')
 def download(PicID):
@@ -79,6 +93,17 @@ def download(PicID):
     api.download(illust.image_urls.large)
     print(">>> origin url: %s" % illust.image_urls['large'])
     return 'NowDownloading'
+
+#跳转到这个页面之后 就在数据库中检查是否有重复并加入数据库
+#成功注册后，就跳转到为这个用户呈现的主页面中
+@app.route('/submittRegister/<Name>,<Pswd>')
+def submittRegister(name,pswd):
+    UserId=SQLOS.UserRegist(name,pswd)
+    if (UserId==-1):
+        return render_template('NameHasBeenRegistered.html')
+    if (UserId==0):
+        return render_template('SomeThingWrongWithSQL.html')
+    return redirect('127.0.0.1:19990/index/'+str(UserId))
     
 @app.route('/time')
 def time():
