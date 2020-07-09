@@ -3,6 +3,7 @@
 import sys
 import os
 from sys import path
+path.append('..')
 path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
 
 from MyScrapyProject.MyScrapyProject.MysqlRW import *
@@ -18,17 +19,7 @@ app = Flask(__name__)  # 创建一个swgi应用
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=5)
 Moment(app)
 
-
-# 设置一个数据库链接
-
-def get_conn():
-    connection = pymysql.connect(host='rm-bp10wr08s7nl319dcyo.mysql.rds.aliyuncs.com',
-                                 user='pixiv_rec_staff',
-                                 password='!5xDWVQJg4u3C9c',
-                                 db='pixiv_user',
-                                 charset='utf8mb4',
-                                 cursorclass=pymysql.cursors.DictCursor)
-    return connection
+UserAccount={}
 
 
 @app.route('/')
@@ -40,10 +31,9 @@ def JumpToIndex():
 # 用来显示当前登录的用户，同时为用来确定是否绑定了Pix账号
 @app.route('/index/<UserId>')
 def index(UserId):
-    UserId = int(UserId)
-    UserAccount = SQLOS.GetAccountById(UserId)
+    UserAccount = SQLOS.GetUserAccount(UserId)
 
-    return render_template('index.html', UserAccount)
+    return render_template('index.html', UserAccount=UserAccount)
 
 
 @app.route('/BindPixivID/<userid>,<pixid>')
@@ -63,24 +53,30 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/status')
-def status():
-    return render_template('status.html')
+@app.route('/status/<userid>')
+def status(userid):
+    UserAccount = SQLOS.GetUserAccount(userid)
+    if UserAccount.get('PixivID')==0:
+        return render_template('status.html', UserAccount=UserAccount)
+    return redirect('http://127.0.0.1:19990/status1/' + userid)
 
 
-@app.route('/person')
-def person():
-    return render_template('person.html')
+@app.route('/person/<userid>')
+def person(userid):
+    UserAccount = SQLOS.GetUserAccount(userid)
+    return render_template('person.html', UserAccount=UserAccount)
 
 
-@app.route('/list')
-def list():
-    return render_template('list.html')
+@app.route('/list/<userid>')
+def list(userid):
+    UserAccount = SQLOS.GetUserAccount(userid)
+    return render_template('list.html', UserAccount=UserAccount)
 
 
-@app.route('/recommend')
-def recommend():
-    return render_template('recommend.html')
+@app.route('/recommend/<userid>')
+def recommend(userid):
+    UserAccount = SQLOS.GetUserAccount(userid)
+    return render_template('recommend.html', UserAccount=UserAccount)
 
 @app.route('/personinfoedit')
 def perinfoedit():
@@ -91,9 +87,10 @@ def perinfoedit():
 def id_edit():
     return render_template('id_edit.html')
 
-@app.route('/status1')
-def status1():
-    return render_template('status1.html')
+@app.route('/status1/<userid>')
+def status1(userid):
+    UserAccount = SQLOS.GetUserAccount(userid)
+    return render_template('status1.html', UserAccount=UserAccount)
 
 
 # 检查登录信息是否正确
@@ -107,7 +104,7 @@ def LoginCheck(username, userpswd):
         return render_template('AccountNotFound.html')
     if info == -1:
         return render_template('PswdIsIncorrect.html')
-    return redirect('127.0.0.1:19990/index/' + str(UserId))
+    return redirect('http://127.0.0.1:19990/index/' + str(info))
 
 
 # 跳转到这个页面之后 就下载PicID这个图片

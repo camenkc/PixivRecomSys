@@ -18,11 +18,11 @@
 		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a> 
 	</div>
 	<ul class="index-nav fl">
-		<li><a href="/index">首页</a></li>
-		<li><a href="/status">登录状态</a></li>
-		<li><a href="/person">个人中心</a></li>
-		<li><a href="/list">热门榜</a></li>
-		<li><a href="/recommend">自动推荐</a></li>
+		<li><a href="/index/{{UserAccount.ID}}">首页</a></li>
+		<li><a href="/status/{{UserAccount.ID}}">登录状态</a></li>
+		<li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
+		<li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
+		<li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
 		<li><a href="https://www.baidu.com">联系我们</a></li>
 	</ul>
 	<div class="index-header-right fr">
@@ -61,16 +61,16 @@
         <table border="1" bordercolor="yellow" align="center">
             <tr>
                 <td>
+                    <h3>ID</h3>
+                </td>
+                <td>
+					<input type="text" id="name" name="name" value="{{UserAccount.ID}}">
+                </td>
+                <td>
                     <h3>用户名</h3>
                 </td>
                 <td>
-					<input type="text" id="name"" name="name">
-                </td>
-                <td>
-                    <h3>密码</h3>
-                </td>
-                <td>
-					<input type="text" id="password" name="password"
+					<input type="text" id="password" name="password" value="{{UserAccount.Username}}"
                 </td>
             </tr>
             <!--待添加其他信息-->

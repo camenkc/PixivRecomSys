@@ -20,11 +20,11 @@
 		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a> 
 	</div>
 	<ul class="index-nav fl">
-		<li><a href="/index">首页</a></li>
-		<li><a href="/status">登录状态</a></li>
-		<li><a href="/person">个人中心</a></li>
-		<li><a href="/list">热门榜</a></li>
-		<li><a href="/recommend">自动推荐</a></li>
+		<li><a href="/index/{{UserAccount.ID}}">首页</a></li>
+		<li><a href="/status/{{UserAccount.ID}}">登录状态</a></li>
+		<li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
+		<li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
+		<li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
 		<li><a href="https://www.baidu.com">联系我们</a></li>
 	</ul>
 	<div class="index-header-right fr">
@@ -70,7 +70,7 @@
                     <h3><p style="font-size:20px">已绑定ID</p></h3>
                 </td>
                 <td>
-                    <input type="text" id="id" name="id">
+                    <input type="text" id="id" name="id" value="{{UserAccount.PixivID}}"/>
                 </td>
             </tr>
         </table>

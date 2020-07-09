@@ -11,10 +11,9 @@
 				var password = document.getElementById("password").value;
                 var repeat_pwd = document.getElementById("repeat_pwd").value;
                 var pixiv_name = document.getElementById("pixiv_name").value;
-                var pixiv_pwd = document.getElementById("pixiv_pwd").value;
 
 
-				if(username == "" || password == "" || repeat_pwd == "" || pixiv_name == "" || pixiv_pwd =="") {
+				if(username == "" || password == "" || repeat_pwd == "" ) {
 						alert("输入不能为空！");
                         clear_text();
 						return false;
@@ -24,17 +23,9 @@
                     clear_text();
 					return false;
 				}else{
-                    alert("注册成功！");
-                    clear_text();
-					window.location.href = '/index';
+					window.location.href = '/submittRegister/'+username+','+password;
                 }
                 
-            function clear_text(){
-                var username = document.getElementById("username").value = "";
-				var password = document.getElementById("password").value = "";
-                var repeat_pwd = document.getElementById("repeat_pwd").value = "";
-                var pixiv_name = document.getElementById("pixiv_name").value = "";
-                var pixiv_pwd = document.getElementById("pixiv_pwd").value = "";
             }
 		}
 		</script>
@@ -52,10 +43,10 @@
 				
 				<input type="password" id="repeat_pwd" name="repeat_pwd" placeholder="Repeat your password">
 				
-				<input type="text" id="pixiv_name" name="pixiv_name" placeholder="Your pixiv name">
+				<input type="text" id="pixiv_name" name="pixiv_name" placeholder="Your pixiv ID(Optional)">
 				
-				<input type="password" id="pixiv_pwd" name="pixiv_pwd" placeholder="Your pixiv pwd">
-
+				<!--<input type="password" id="pixiv_pwd" name="pixiv_pwd" placeholder="Your pixiv pwd(Optional)">
+				-->
 				<input type="button" class = "button" value="注册" onclick = "register()">
 				
 		    </div>
