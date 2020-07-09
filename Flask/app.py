@@ -9,12 +9,13 @@ from flask import redirect
 import pymysql.cursors
 from pixivpy3 import *
 
+
 app = Flask(__name__) #创建一个swgi应用
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=5)
 Moment(app)
 
 #设置一个数据库链接
-'''
+
 def get_conn():
     connection = pymysql.connect(host='rm-bp10wr08s7nl319dcyo.mysql.rds.aliyuncs.com',
                         user='pixiv_rec_staff',
@@ -23,7 +24,6 @@ def get_conn():
                         charset='utf8mb4',
                         cursorclass=pymysql.cursors.DictCursor)
     return connection
-'''
 
 @app.route('/')
 def JumpToIndex():
@@ -31,9 +31,7 @@ def JumpToIndex():
 
 @app.route('/index')
 def index():
-    '''  
     connection = get_conn()
-
     try:
         with connection.cursor() as cursor:
             sql = "SELECT `PixivID`, `Pixivpw`,`Username` `Userpw` FROM `d_user_account`"
@@ -42,10 +40,10 @@ def index():
             return render_template("index.html", user_info = user_info)
     finally:
         connection.close()
-        '''
+
     return render_template('index.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     return render_template('login.html')
 
@@ -69,7 +67,16 @@ def list():
 def recommend():
     return render_template('recommend.html')
 
-#跳转到这个页面之后 就下载PicID这个图片
+@app.route('/personinfoedit')
+def perinfoedit():
+    return render_template('personal_infoedit.html')
+
+@app.route('/idedit')
+def id_edit():
+    return render_template('id_edit.html')
+
+
+
 @app.route('/download/<PicID>')
 def download(PicID):
     api = AppPixivAPI()
@@ -79,6 +86,9 @@ def download(PicID):
     api.download(illust.image_urls.large)
     print(">>> origin url: %s" % illust.image_urls['large'])
     return 'NowDownloading'
+
+#跳转到这个页面之后 就下载PicID这个图片
+
     
 @app.route('/time')
 def time():

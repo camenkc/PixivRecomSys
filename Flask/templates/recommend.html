@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8">
 <title>基于pixiv的画师推荐平台</title>
-<link rel="stylesheet" type="text/css" href="static/css/style.css" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/initial.css') }}">
-<link rel="stylesheet" type="text/css" href="static/css/common.css">		
-<link rel="stylesheet" type="text/css" href="static/css/animate.min.css">
-<link rel="stylesheet" type="text/css" href="static/css/animate.css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/animate.css') }}"/>
 <link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
 <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css"/>
 <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css"/>
@@ -27,7 +26,7 @@
 		<li><a href="https://www.baidu.com">联系我们</a></li>
 	</ul>
 	<div class="index-header-right fr">
-		<a href="" class="search-btn">搜索</a>	
+		<a href="" class="search-btn">搜索</a>
 		<a href="" class="erweima">
 			<div class="erweima-pic">
 				<img src=" {{url_for('static', filename='images/pic1.jpg')}} ">
@@ -36,7 +35,7 @@
 	</div>
 	<div class="clear"></div>
 </div>
-	
+
 <div class="search_sec">
 	<a href="#" title="" class="close-search"><i class=" la-close"><img src="{{ url_for('static',filename ='images/icon5.png')}}"></i></a>
 	<div class="search_field">
@@ -47,7 +46,7 @@
 			</form>
 		</div>
 	</div>
-</div>	
+</div>
 <!--search_sec end-->
 	 
 <div class="section index-sec4">
@@ -57,9 +56,28 @@
 
 					<a href="">
 						<p>根据tagxxxx向您推荐</p>
-							<img src="{{ url_for('static',filename ='images/girl.png')}}"/>
-							<div style="font-size:12;color:#000">画师xxx</div>
-							<br><div style="font-size:12;color:#000">xxx</div>
+							<img src="{{ url_for('static',filename ='images/girl.png')}}" style ="margin-right:30px;"/>
+
+                            <img src="{{ url_for('static',filename ='images/girl.png')}}" style ="margin-right:30px;"/>
+
+                            <img src="{{ url_for('static',filename ='images/girl.png')}}" style ="margin-right:30px;"/>
+
+                            <img src="{{ url_for('static',filename ='images/girl.png')}}" style ="margin-right:30px;"/>
+
+
+
+                            <div style="font-size:20px; padding:5px; color:#000">画师xxx                                              &ensp; &ensp; &ensp; &ensp; &ensp; &ensp;
+                                画师xxx                                                                                               &ensp; &ensp; &ensp; &ensp; &ensp;&ensp;&ensp;
+                                画师xxx                                                                                               &ensp; &ensp; &ensp; &ensp; &ensp;&ensp;
+                                画师xxx                                                                                               &ensp; &ensp; &ensp; &ensp; &ensp;
+                            </div>
+
+
+                            <div style="font-size:20px; padding:5px; color:#000">xxxxx                                                  &ensp; &ensp; &ensp; &ensp; &ensp; &ensp; &ensp;&ensp; &ensp;
+                                xxxxx                                                                                               &ensp; &ensp; &ensp; &ensp; &ensp; &ensp; &ensp;
+                                xxxxx                                                                                              &ensp; &ensp; &ensp; &ensp; &ensp; &ensp; &ensp;
+                                xxxxx                                                                                              &ensp; &ensp; &ensp; &ensp; &ensp; &ensp; &ensp;
+                            </div>
 					</a>				            	
 				</div>	
 
@@ -76,14 +94,13 @@
 			</div>     
 			<span class="line"></span>
 			<div class="swiper-button-next"> &gt; </div>
-			<div class="swiper-button-prev"> &lt;</div>	
-		
+			<div class="swiper-button-prev"> &lt;</div>
+
 			<input type="submit" value="换一个tag" onclick ="change_tag()">
+        <input type="submit" value="换一组图片" onclick ="change_pic()">
 		
 	</div>			
 </div>
-
-
 
 <div class="section index-sec4">
 	<div class="swiper-container animated" id="swiper3">
@@ -108,13 +125,11 @@
 					</a>				            	
 				</div>	
 			</div>
-			<input type="submit" value="换一个画师" onclick ="change_painter()"">	
+			<input type="submit" value="换一个画师" onclick ="change_painter()">
 			<br><br><br>
 			<span class="line"></span>
 			<div class="swiper-button-next"> &gt; </div>
-			<div class="swiper-button-prev"> &lt;</div>	
-
-				
+			<div class="swiper-button-prev"> &lt;</div>		
 	</div>			
 </div>	
 
@@ -131,6 +146,10 @@
 <script src="js/more.js"></script>
 <script>			
 	function change_tag(){
+		alert ("测试成功");
+	}
+
+	function change_pic(){
 		alert ("测试成功");
 	}
 

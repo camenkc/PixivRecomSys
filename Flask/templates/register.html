@@ -14,12 +14,12 @@
                 var pixiv_pwd = document.getElementById("pixiv_pwd").value;
 
 
-				if(username == "" || password == "" || repeat_pwd == "" || pixiv_name == "" || pixiv_pwd =="") {
+				if(!username || !password  || !repeat_pwd  || !pixiv_name || !pixiv_pwd) {
 						alert("输入不能为空！");
                         clear_text();
 						return false;
 					} 
-				else if(!(password == repeat_pwd)){
+				else if(password != repeat_pwd){
 					alert("密码需要一致！");
                     clear_text();
 					return false;

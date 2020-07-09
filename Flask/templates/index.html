@@ -3,16 +3,19 @@
 <head>
 <meta charset="utf-8">
 <title>基于pixiv的画师推荐平台</title>
-<link rel="stylesheet" type="text/css" href="static/css/style.css" />
-<link rel="stylesheet" type="text/css" href="static/css/common.css">	
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/initial.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/animate.css') }}"/>
 <link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
-<link rel="stylesheet" type="text/css" href="static/css/animate.min.css">
+<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css"/>
+<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css"/>
 </head>
-	
+
 <body>
 <div class="index-header clearfix">
 	<div class="index-logo fl">
-		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a> 
+		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a>
 	</div>
 	<ul class="index-nav fl">
 		<li><a href="/index">首页</a></li>
@@ -29,7 +32,7 @@
 <div id="bloc">
 	<article id="index">
 		<div class="banner-position">			
-			<img src="{{ url_for('static',filename ='images/page-banner.jpg')}} " >
+			<img src="{{ url_for('static',filename ='images/background.jpg')}}"  width = "1550" height = "900" >
 		</div>	  
 				
 					
@@ -106,8 +109,9 @@
 				
 						</g>
 					</svg>
-				</div>
-			</div>
-					
+                </div>
+    </article>
+</div>
+
 </body>
 </html>
