@@ -1,13 +1,13 @@
-import sys
-import os
-from sys import path
-path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
+from MyScrapyProject.items import UserAccount
 from itemadapter import ItemAdapter
+from json import load
+from urllib.request import urlopen
 import pymysql.cursors
+
 import datetime
-from MyScrapyProject.MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
+from MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
-from pixivpy3 import *
+from MyScrapyProject.pixivpymaster.pixivpy3 import *
 
 class MYF():
     def __init__(self):
@@ -195,26 +195,7 @@ class SQLOS():
         for onedate in DataFromSQL:
             TagDict[onedate['TagID']]=onedate['TagName']
         return TagDict#得到数据库储存Tag列表，返回一个dict 键值为tagid
-    def GetUserAccount(ID):
-        db=SQLOS.Connect_to_DB()
-        cursor=db.cursor()
-        UserAC={}
-        if cursor.execute("SELECT * from d_user_account WHERE `ID`=%s",ID):
-            DataFromSQL=cursor.fetchall()
-            UserAC['ID']=DataFromSQL[0]['ID']
-            UserAC['PixivID']=DataFromSQL[0]['PixivID']
-            UserAC['Pixivpw']=DataFromSQL[0]['Pixivpw']
-            UserAC['Username']=DataFromSQL[0]['Username']
-            UserAC['Userpw']=DataFromSQL[0]['Userpw']
-            UserAC['Usermode']=DataFromSQL[0]['Usermode']
-            UserAC['Create_date']=DataFromSQL[0]['create_date']
-            UserAC['Lastlogindate']=DataFromSQL[0]['lastlogindate']
-            UserAC['Lastloginip']=DataFromSQL[0]['lastloginip']
-            UserAC['Logincount']=DataFromSQL[0]['logincount']
-            return UserAC
-        else:
-            return -1
-        db.close()#得到制定ID的用户账户信息，成功返回账户信息，未找到ID返回-1
+
     def EditUserAccount(ID,UserAccount):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -230,31 +211,41 @@ class SQLOS():
         else:
             return -1#更改制定ID的用户账户信息，传入一个UserAccount的类，成功返回1，失败返回0，未找到ID返回-1
 
+
     def UserRegist(UserName,Userpw):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
         if cursor.execute("SELECT * FROM d_user_account WHERE`Username`=%s",UserName):
             return -1
         else:
-            
-            pass# 未完成 如果注册成功返回UserID 写入失败返回0 账号名已存在返回-1
+            NewUser=UserAccount()
+            NewUser['Username']=UserName
+            NewUser['Userpw']=Userpw
+            NewUser['Usermode']=0
+            NewUser['Create_date']=datetime.datetime.today()
+            SQLOS.AddUserAccount(NewUser)
+            return 1
+            # 如果注册成功返回UserID 写入失败返回0 账号名已存在返回-1
     def UserLogin(UserName,Userpw):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
         if cursor.execute("SELECT * FROM d_user_account WHERE`Username`=%s",UserName):
             if cursor.execute("SELECT * FROM d_user_account WHERE`Username`=%s AND `Userpw`=%s",(UserName,Userpw)):
                  DataFromSQL=cursor.fetchall()
-                 SQLOS.WritetoLog(DataFromSQL[0]['ID'],0,"登录成功!")
-                 return DataFromSQL[0]['ID'] 
+                 userid=DataFromSQL[0]['ID']
+                 logincount=DataFromSQL[0]['logincount']
+                 SQLOS.WritetoLog(userid,0,"登录成功!")
+                 my_ip = load(urlopen('http://httpbin.org/ip'))['origin']
+                 
+                 cursor.execute("UPDATE d_user_account SET `lastlogindate`=%s,`lastloginip`=%s,`logincount`=%s WHERE `ID`=%s",(datetime.datetime.today(),my_ip,logincount+1,userid))
+                 db.commit()
+                 db.close()
+                 return userid
             else:
                 return -1
         else:
             return  0
         #登录成功返回UserID，账号不存在返回0，密码不正确返回-1
-    def GetUserMode(Userid):
-        useraccount=SQLOS.GetUserAccount(Userid)
-        mode=useraccount["Usermode"]
-        return mode #得到用户模式（是否为隐藏模式）
     def EditUserProfile(UserID,Username,Userpw):
         useraccount=SQLOS.GetUserAccount(UserID)
         useraccount['Username']=Username
@@ -296,7 +287,42 @@ class SQLOS():
         else:
             #没有该记录 跳过并返回-1
             return -1 #向数据库中移除一条收藏记录，并更新user_tag
-
+    def GetStarImageNum(userid):
+        User=SQLOS.GetUserAccount(userid)
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        cursor.execute("SELECT * FROM d_user_star_image WHERE`userid`=%s",userid)
+        DataFromSQL=cursor.fetchall()
+        return len(DataFromSQL)#返回收藏图片总数
+    def GetUserAccount(ID):
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        UserAC=UserAccount()
+        if cursor.execute("SELECT * from d_user_account WHERE `ID`=%s",ID):
+            DataFromSQL=cursor.fetchall()
+            UserAC['ID']=DataFromSQL[0]['ID']
+            UserAC['PixivID']=DataFromSQL[0]['PixivID']
+            UserAC['Pixivpw']=DataFromSQL[0]['Pixivpw']
+            UserAC['Username']=DataFromSQL[0]['Username']
+            UserAC['Userpw']=DataFromSQL[0]['Userpw']
+            UserAC['Usermode']=DataFromSQL[0]['Usermode']
+            UserAC['Create_date']=DataFromSQL[0]['create_date']
+            UserAC['Lastlogindate']=DataFromSQL[0]['lastlogindate']
+            UserAC['Lastloginip']=DataFromSQL[0]['lastloginip']
+            UserAC['Logincount']=DataFromSQL[0]['logincount']
+            return UserAC
+        else:
+            return -1
+        db.close()#得到制定ID的用户账户信息，成功返回账户信息，未找到ID返回-1
+    def GetImageIdlist(tag,num):
+        aapi = AppPixivAPI()
+        nl=[]
+        aapi.login("CakeBaker.0518@gmail.com","12138ckC")
+        json_result = aapi.search_illust((tag,'5000users入り'), search_target='partial_match_for_tags')
+        for a in range(1,num):
+            illust = json_result.illusts[a]
+            nl.append({'ID':illust['id'],'title':illust['title'],'author':illust.user['name']})
+        return nl#输入tag名称和返回张数，返回5000收藏以上的图片信息list
     def GetUserStarImage(ID):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
@@ -348,4 +374,4 @@ class SQLOS():
                 a-=-1
             else:
                 pass
-        return newdict#返回用户前若干个tag偏好
+        return newdict#返回用户前若干个tag偏好 以字典形式返回
