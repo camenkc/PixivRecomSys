@@ -1,289 +1,348 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>pixiv收藏分析与图片推荐平台</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/initial.css')}}">
-<link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
-<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css"/>
-<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css"/>
+    <meta charset="utf-8">
+    <title>pixiv收藏分析与图片推荐平台</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/common.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/animate.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename ='css/initial.css')}}">
+    <link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css" />
 
 </head>
-	
+
 <body>
-<div class="index-header clearfix">
-	<div class="index-logo fl">
-		<a href =""><img src="{{url_for('static', filename='images/girl.png') }}" width = "50" height = "50"></a> 
-		<br/>{{UserAccount.Username}}
-	</div>
-	<ul class="index-nav fl">
-		<li><a href="/index/{{UserAccount.ID}}">首页</a></li>
-		<li><a href="/status/{{UserAccount.ID}}">登录状态</a></li>
-		<li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
-		<li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
-		<li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
-		<li><a href="/bingtu/{{UserAccount.ID}}">最爱的Tags</a></li>
-	</ul>
-	<div class="index-header-right fr">
-		<a href="" class="search-btn">搜索</a>	
-		<a href="" class="erweima">
-			<div class="erweima-pic">
-				<img src=" {{url_for('static', filename='images/pic1.jpg')}} ">
-			</div>
-		</a>
-	</div>
-	<div class="clear"></div>
-</div>
-	
-<div class="search_sec">
-	<a href="#" title="" class="close-search"><i class=" la-close"><img src="{{ url_for('static',filename ='images/icon5.png')}}"></i></a>
-	<div class="search_field">
-		<div class="container">
-			<form>
-				<input type="text" name="search" placeholder="Search for...">
-				<button type="submit"><img src="{{ url_for('static',filename ='images/search2.png')}}" alt=""></button>
-			</form>
-		</div>
-	</div>
-</div>	
-<!--search_sec end-->
+    <div class="index-header clearfix">
+        <div class="index-logo fl">
+            <a href=""><img src="{{url_for('static', filename='images/girl.png') }}" width="50" height="50"></a>
+            <br />{{UserAccount.Username}}
+        </div>
+        <ul class="index-nav fl">
+            <li><a href="/index/{{UserAccount.ID}}">首页</a></li>
+            <li><a href="/status/{{UserAccount.ID}}">登录状态</a></li>
+            <li><a href="/person/{{UserAccount.ID}}">个人中心</a></li>
+            <li><a href="/list/{{UserAccount.ID}}">热门榜</a></li>
+            <li><a href="/recommend/{{UserAccount.ID}}">自动推荐</a></li>
+            <li><a href="/bingtu/{{UserAccount.ID}}">最爱的Tags</a></li>
+        </ul>
+        <div class="index-header-right fr">
+            <a href="" class="search-btn">搜索</a>
+            <a href="" class="erweima">
+                <div class="erweima-pic">
+                    <img src=" {{url_for('static', filename='images/pic1.jpg')}} ">
+                </div>
+            </a>
+        </div>
+        <div class="clear"></div>
+    </div>
 
-<div class="section index-sec4">
-	<div class="swiper-container animated" id="swiper2">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-									
-					<a href="">
-							<br/><br/><br/>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[0].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[0].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[0].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[1].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[1].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[1].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[2].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[2].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[2].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{PicList1[3].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[3].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[3].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[4].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[4].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[4].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[5].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[5].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[5].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{PicList1[6].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[6].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[6].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[7].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[7].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[7].author}}</div>
-							</div>
-					</a>				            	
-				</div>	
+    <div class="search_sec">
+        <a href="#" title="" class="close-search"><i class=" la-close"><img src="{{ url_for('static',filename ='images/icon5.png')}}"></i></a>
+        <div class="search_field">
+            <div class="container">
+                <form>
+                    <input type="text" name="search" placeholder="Search for...">
+                    <button type="submit"><img src="{{ url_for('static',filename ='images/search2.png')}}" alt=""></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--search_sec end-->
 
-				<div class="swiper-slide">
-													
-					<a href=""><br/><br/><br/>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[8].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[8].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[8].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[9].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[9].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[9].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[10].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[10].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[10].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{PicList1[11].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[11].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[11].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[12].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[12].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[12].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[13].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[13].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[13].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{PicList1[14].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[14].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[14].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList1[15].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList1[15].title}}</div>
-							<div style="font-size:12;color:white">{{PicList1[15].author}}</div>
-							</div>
-					</a>				            	
-				</div>	
-				
-			</div>     
-			<span class="line"></span>
-			<div class="swiper-button-next"> &gt; </div>
-			<div class="swiper-button-prev"> &lt;</div>	
+    <div class="section index-sec4">
+        <div class="swiper-container animated" id="swiper2">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
 
-		
+                    <a href="">
+                        <br /><br /><br />
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[0].address}}> <img src="{{PicList1[0].ID}}" width="130" height="130" /></a>
+                            <div style="font-size:12;color:white">{{PicList1[0].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[0].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[1].address}}><img src="{{PicList1[1].ID}}" width="130" height="130" /></a>
+                            <div style="font-size:12;color:white">{{PicList1[1].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[1].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[2].address}}>
+                                <img src="{{PicList1[2].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[2].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[2].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{PicList1[3].address}}>
+                                <img src="{{PicList1[3].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[3].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[3].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[4].address}}>
+                                <img src="{{PicList1[4].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[4].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[4].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[5].address}}>
+                                <img src="{{PicList1[5].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[5].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[5].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{PicList1[6].address}}>
+                                <img src="{{PicList1[6].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[6].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[6].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[7].address}}>
+                                <img src="{{PicList1[7].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[7].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[7].author}}</div>
+                        </div>
+                    </a>
+                </div>
 
-	</div>			
-</div>
+                <div class="swiper-slide">
 
+                    <a href="">
+                        <br /><br /><br />
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[8].address}}>
+                                <img src="{{PicList1[8].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[8].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[8].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[9].address}}>
+                                <img src="{{PicList1[9].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[9].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[9].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[10].address}}>
+                                <img src="{{PicList1[10].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[10].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[10].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{PicList1[11].address}}>
+                                <img src="{{PicList1[11].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[11].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[11].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[12].address}}>
+                                <img src="{{PicList1[12].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[12].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[12].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[13].address}}>
+                                <img src="{{PicList1[13].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[13].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[13].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{PicList1[14].address}}>
+                                <img src="{{PicList1[14].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList1[14].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList1[14].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList1[15].address}}>
+                                <img src="{{PicList1[15].ID}}" width="130" height="130" />
+                                <div style="font-size:12;color:white">{{PicList1[15].title}}</div>
+                                <div style="font-size:12;color:white">{{PicList1[15].author}}</div>
+                        </div>
+                    </a>
+                </div>
 
-
-<div class="section index-sec4">
-	<div class="swiper-container animated" id="swiper1">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-									
-					<a href="">
-							<br/><br/><br/>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[0].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[0].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[0].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[1].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[1].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[1].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[2].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[2].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[2].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{PicList2[3].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[3].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[3].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[4].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[4].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[4].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[5].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[5].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[5].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{PicList2[6].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[6].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[6].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[7].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[7].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[7].author}}</div>
-							</div>
-					</a>				            	
-				</div>	
-
-				<div class="swiper-slide">
-													
-					<a href=""><br/><br/><br/>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[8].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[8].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[8].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[9].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[9].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[9].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[10].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[10].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[10].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{PicList2[11].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[11].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[11].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[12].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[12].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[12].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[13].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[13].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[13].author}}</div>
-							</div><div style="float:left;margin-left:10px">
-							<img src="{{PicList2[14].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[14].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[14].author}}</div>
-							</div>
-							<div style="float:left;margin-left:10px">
-							<img src="{{PicList2[15].ID}}" width="130" height="130"/>
-							<div style="font-size:12;color:white">{{PicList2[15].title}}</div>
-							<div style="font-size:12;color:white">{{PicList2[15].author}}</div>
-							</div>
-					</a>				            	
-				</div>	
-			</div>   
-			<input type="submit" value="换一个tag" onclick ="change_painter()"">	
-			<br><br><br>  
-			<span class="line"></span>
-			<div class="swiper-button-next"> &gt; </div>
-			<div class="swiper-button-prev"> &lt;</div>	
-
-			</div>
-			
-			
-
-
-				
-	</div>			
-</div>
-			
-<div class="section index-sec1"></div>
+            </div>
+            <span class="line"></span>
+            <div class="swiper-button-next"> &gt; </div>
+            <div class="swiper-button-prev"> &lt;</div>
 
 
 
-<script src="http://www.5imoban.net/download/jquery/jquery-1.8.3.min.js"></script>
-<script src="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.js"></script>
-<script src="js/banner.js"></script>
-<script src="js/index.js"></script>
-<script src="js/plugin.js"></script>		
-<script src="http://www.5imoban.net/download/fullPage/fullPage-2.7.1.min.js"></script>
-<script src="js/more.js"></script>
-<script>			
+        </div>
+    </div>
 
-	
-	
+
+    <div class="section index-sec4">
+        <div class="swiper-container animated" id="swiper1">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+
+                    <a href="">
+                        <br /><br /><br />
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[0].address}}> <img src="{{PicList2[0].ID}}" width="130" height="130" /></a>
+                            <div style="font-size:12;color:white">{{PicList2[0].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[0].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[1].address}}><img src="{{PicList2[1].ID}}" width="130" height="130" /></a>
+                            <div style="font-size:12;color:white">{{PicList2[1].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[1].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[2].address}}>
+                                <img src="{{PicList2[2].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[2].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[2].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{PicList2[3].address}}>
+                                <img src="{{PicList2[3].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[3].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[3].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[4].address}}>
+                                <img src="{{PicList2[4].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[4].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[4].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[5].address}}>
+                                <img src="{{PicList2[5].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[5].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[5].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{PicList2[6].address}}>
+                                <img src="{{PicList2[6].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[6].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[6].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[7].address}}>
+                                <img src="{{PicList2[7].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[7].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[7].author}}</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="swiper-slide">
+
+                    <a href="">
+                        <br /><br /><br />
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[8].address}}>
+                                <img src="{{PicList2[8].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[8].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[8].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[9].address}}>
+                                <img src="{{PicList2[9].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[9].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[9].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[10].address}}>
+                                <img src="{{PicList2[10].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[10].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[10].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{PicList2[11].address}}>
+                                <img src="{{PicList2[11].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[11].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[11].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[12].address}}>
+                                <img src="{{PicList2[12].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[12].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[12].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[13].address}}>
+                                <img src="{{PicList2[13].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[13].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[13].author}}</div>
+                        </div><div style="float:left;margin-left:10px">
+                            <a href={{PicList2[14].address}}>
+                                <img src="{{PicList2[14].ID}}" width="130" height="130" />
+                            </a>
+                            <div style="font-size:12;color:white">{{PicList2[14].title}}</div>
+                            <div style="font-size:12;color:white">{{PicList2[14].author}}</div>
+                        </div>
+                        <div style="float:left;margin-left:10px">
+                            <a href={{PicList2[15].address}}>
+                                <img src="{{PicList2[15].ID}}" width="130" height="130" />
+                                <div style="font-size:12;color:white">{{PicList2[15].title}}</div>
+                                <div style="font-size:12;color:white">{{PicList2[15].author}}</div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+            <span class="line"></span>
+            <div class="swiper-button-next"> &gt; </div>
+            <div class="swiper-button-prev"> &lt;</div>
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+    </div>
+    </div>
+
+    <div class="section index-sec1"></div>
+
+
+
+    <script src="http://www.5imoban.net/download/jquery/jquery-1.8.3.min.js"></script>
+    <script src="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.js"></script>
+    <script src="js/banner.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/plugin.js"></script>
+    <script src="http://www.5imoban.net/download/fullPage/fullPage-2.7.1.min.js"></script>
+    <script src="js/more.js"></script>
+    <script>
+
+
+
+
 
 	function change_painter(){
 		window.location.href = '/recommend/{{UserAccount.ID}}';
 	}
-	
-	
-	
+
+
+
 	var swiper = new Swiper('#swiper1', {
 		loop:true,
 		loopedSlides:3,
@@ -293,14 +352,14 @@
         pagination: '.swiper-pagination',
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
-        breakpoints: { 				   
+        breakpoints: {
 		    1600: {
 		      spaceBetween:40,
 		    }
 	     }
-	  });  
-	
-	 var swiper = new Swiper('#swiper2',{				
+	  });
+
+	 var swiper = new Swiper('#swiper2',{
 		loop:true,
 		loopedSlides:3,
 		spaceBetween:80,
@@ -309,15 +368,15 @@
         pagination: '.swiper-pagination',
         nextButton: '.swiper-button-next',
         prevButton: '.swiper-button-prev',
-        breakpoints: { 				   
+        breakpoints: {
 		    1600: {
 		      spaceBetween:40,
 		    }
 	     }
-	  });  
-	
-	
-</script>
+	  });
+
+
+    </script>
 </body>
 </html>
 

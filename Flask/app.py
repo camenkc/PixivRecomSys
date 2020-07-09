@@ -7,8 +7,8 @@ path.append('..')
 path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
 
 print(path)
-from MyScrapyProject.MyScrapyProject.spiders.StarSpider import ScrapyForUserStarClass
-from MyScrapyProject.MyScrapyProject.MysqlRW import *
+from MyScrapyProject.spiders.StarSpider import ScrapyForUserStarClass
+from MyScrapyProject.MysqlRW import *
 from flask_moment import Moment
 from flask import Flask,Response
 from flask import render_template
@@ -163,6 +163,7 @@ def recommend(userid):
             PicList1[p]['title'] = PicList1[p]['title'][:6]+'...'
         if len(PicList1[p]['author'])>6:
             PicList1[p]['author'] = PicList1[p]['author'][:6]+'...'
+        PicList1[p]['address']='https://www.pixiv.net/artworks/'+str(PicList1[p]['ID'])
         PicList1[p]['ID']='static/images/'+str(PicList1[p]['ID'])+"_p0_square1200.jpg"
         print(PicList1[p]['ID'])
     print(len(PicList1))
@@ -174,11 +175,14 @@ def recommend(userid):
             PicList2[p]['title'] = PicList1[p]['title'][:6]+'...'
         if len(PicList2[p]['author'])>6:
             PicList2[p]['author'] = PicList2[p]['author'][:6]+'...'
+        PicList2[p]['address']='https://www.pixiv.net/artworks/'+str(PicList2[p]['ID'])
         PicList2[p]['ID']='static/images/'+str(PicList2[p]['ID'])+"_p0_square1200.jpg"
         print(PicList1[p]['ID'])
     NowRemTag+=1
     print(len(PicList2))
-    
+    print(111)
+    print(PicList1[0])
+    print(222)
     return render_template('recommend.html', UserAccount=UserAccount,PicList1=PicList1,PicList2=PicList2)
 
 @app.route('/personinfoedit')
