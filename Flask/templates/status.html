@@ -3,13 +3,10 @@
 <head>
 <meta charset="utf-8">
 <title>基于pixiv的画师推荐平台</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/initial.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/common.css') }}"/>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/animate.css') }}"/>
+<link rel="stylesheet" type="text/css" href="static/css/style.css" />
+<link rel="stylesheet" type="text/css" href="static/css/common.css">	
 <link rel="stylesheet" href="http://www.5imoban.net/download/swiper/swiper-4.4.2.min.css" />
-<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/css/animate-3.7.0.css"/>
-<link rel="stylesheet" type="text/css" href="http://www.5imoban.net/download/swiper/swiper-3.4.2.min.css"/>
+<link rel="stylesheet" type="text/css" href="static/css/animate.min.css">
 </head>
 	
 <body>
@@ -59,63 +56,7 @@
             <div class="sec1-cont">		
             
 				<h3 align="center"> <p style="font-size:30px">登录状态</p>   </h3>
-		
-        <br><br>
-        <h2 align="center">ID绑定</h2>
-        <table border="1" bordercolor="yellow" align="center">
-            <tr>
-                <!--根据数据判断未绑定还是已绑定，若绑定，则显示相关ID，未绑定就是空白-->
-                <td>
-                    <h3>绑定状态</h3>
-                </td>
-                <td>
-                    <input type="text" id="condition" name="condition">
-                </td>
-                <td>
-                    <h3>ID</h3>
-                </td>
-                <td>
-                    <input type="text" id="id" name="id">
-                </td>
-            </tr>
-        </table>
-
-		<!--此处按钮改动-->
-		<div style="text-align:center">
-			<br><button class = "login-button" onclick = "idedit()">绑定/重新绑定</button>
-		 </div>
-
-        <br><br><br>
-
-        <h2 align="center">个人信息</h2>
-        <table border="1" bordercolor="yellow" align="center">
-            <tr>
-                <td>
-                    <h3>用户名</h3>
-                </td>
-                <td>
-					<input type="text" id="name"" name="name">
-                </td>
-                <td>
-                    <h3>密码</h3>
-                </td>
-                <td>
-					<input type="text" id="password" name="password"
-                </td>
-            </tr>
-            <!--待添加其他信息-->
-        </table>
-
-        <!--创建按钮，修改个人信息-->
-        <div style="text-align:center">
-			<br><button class = "login-button" onclick = "personinfoedit()">修改信息</button>
-		 </div>
-
-
-        <h5 align="right">隐藏模式</h5>
-        <div style="text-align:right">
-			<button class = "login-button1" onclick = "">切换</button>
-		 </div>
+				<h4></h4><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 				<p class="p1"></p>
     
    				</div>
@@ -123,14 +64,6 @@
         </article>
     </div>
 
-	<script type="text/javascript">
-		function idedit(){
-			window.location.href = '/idedit';
-		}
-		function personinfoedit(){
-			window.location.href = '/personinfoedit';
-		}
-	</script>
 
 
 </body>
