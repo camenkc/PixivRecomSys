@@ -15,7 +15,7 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=5)
 Moment(app)
 
 #设置一个数据库链接
-'''
+
 def get_conn():
     connection = pymysql.connect(host='rm-bp10wr08s7nl319dcyo.mysql.rds.aliyuncs.com',
                         user='pixiv_rec_staff',
@@ -24,7 +24,6 @@ def get_conn():
                         charset='utf8mb4',
                         cursorclass=pymysql.cursors.DictCursor)
     return connection
-'''
 
 @app.route('/')
 def JumpToIndex():
@@ -44,7 +43,7 @@ def BindPixivID(pixid):
     pixid=int(pixid)
     
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     return render_template('login.html')
 
