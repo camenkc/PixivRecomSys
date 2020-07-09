@@ -1,8 +1,10 @@
 # 使用模板，为了将数据以html文档的格式展示出来
 
 import sys
+import os
+from sys import path
+path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
 
-sys.path.append('..')
 from MyScrapyProject.MyScrapyProject.MysqlRW import *
 from flask_moment import Moment
 from flask import Flask
