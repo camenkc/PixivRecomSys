@@ -1,12 +1,10 @@
-import sys
-sys.path.append('../')
-from items import UserAccount
+from MyScrapyProject.items import UserAccount
 from itemadapter import ItemAdapter
 
 import pymysql.cursors
 
 import datetime
-from spiders.PureSpiders import ScrapyForPicTagsClass
+from MyScrapyProject.spiders.PureSpiders import ScrapyForPicTagsClass
 Logtype=("登录","注册","修改个人信息","绑定","添加收藏","移除收藏","添加关注","移除关注")
 
 class MYF():
@@ -36,12 +34,13 @@ class MYF():
             lastmaxnum-=-1
         return newdict #输入原tag的dict和需要补充进去tag的list，返回新生成的tagdict
     def AddUserTag(userdict,taglist,tagdict):
+        newdict={}
         for tag in taglist:
             if(userdict.__contains__(tagdict[tag])):
-                userdict[tagdict[tag]]-=-1
+                newdict[tagdict[tag]]=userdict[tagdict[tag]]+1
             else:
-                userdict[tagdict[tag]]=1
-        return userdict#输入用户tagdict,需要添加的taglist，和完整的tagdict
+                newdict[tagdict[tag]]=1
+        return newdict#输入用户tagdict,需要添加的taglist，和完整的tagdict
 
 
 
@@ -108,41 +107,23 @@ class SQLOS():
             db.close()
             return 0 #向数据库中填入一条收藏数据
     
-    def UpdateUsertag(userid,pictags):
+    def UpdateUsertag(userid,userdict):
         db=SQLOS.Connect_to_DB()
         cursor=db.cursor()
         try:
-            for tag in pictags:
-                #对于每一个新收藏图片的tag 先检查再taglist中有没有这个tag：
-                sqlSelect='select `tagid` from `d_tag_list` where `tagname`= %s'
-                info = cursor.execute(sqlSelect,(tag))
-                if info ==0 : #说明这个tag不存在与tagList中
-                    sqlInsert='insert into `d_tag_list`(`tagname`) values(%s)'
-                    cursor.execute(sqlInsert,(tag))
-                    info = cursor.execute(sqlSelect,(tag))
-                info = cursor.fetchall()
-                tagid=info[0]['tagid']
-                #下面对这些tag在UserTag计数器中+1
-                
-                #首先判断是否存在于其中
-                sqlSelect='select `count` from `d_user_tag` where `userid` = '+str(userid)+'  and `tagid` = '+str(tagid)+''
-                info = cursor.execute(sqlSelect)
-                if info==0:#说明这个tag不存在这个用户的收藏tag中
-                    sqlInsert='insert into `d_user_tag`(`userid`,`tagid`,`count`) values(%s,%s,%s)'
-                    cursor.execute(sqlInsert,(str(userid),str(tagid),str(1)))
-                    countNumber=1
-                else : #说明在这个tag中 需要把count+1
-                    info = cursor.fetchall()
-                    countNumber=info[0]['count']
-                    countNumber=int(countNumber)+1
-                    sqlUpdate='UPDATE `d_user_tag` SET `count`='+str(countNumber)+' WHERE `userid`='+str(userid)+' and `tagid`= '+str(tagid)
-                    cursor.execute(sqlUpdate)
-                #print('TagID：'+str(tagid)+' 已经成功更新 '+' 计数为：'+str(countNumber))
+            for tagid,tagcount in userdict.items():
+                #print(tagid)
+                if(cursor.execute("SELECT * FROM d_user_tag WHERE`userid`=%s AND `tagid`=%s",(userid,tagid))):
+                    if tagcount==0:
+                        cursor.execute("DELETE FROM d_user_tag WHERE `userid`=%s AND `tagid`=%s",(userid,tagid))#删除count为零的记录
+                    else:
+                        cursor.execute("UPDATE d_user_tag SET `count`=%s WHERE `userid`=%s AND `tagid`=%s ",(tagcount,userid,tagid))#更新tag
+                else:
+                    cursor.execute("INSERT INTO d_user_tag (`userid`,`tagid`,`count`) VALUE (%s,%s,%s)",(userid,tagid,tagcount))#没有数据的话插入一条新的数据
             db.commit()
             db.close()
             return 1
-        except Exception as e:
-            print(e)
+        except:
             db.rollback()
             db.close()
             return 0 #更新数据库中user的tag列表
@@ -153,11 +134,30 @@ class SQLOS():
         if(SQLOS.CheckStarImage(Userid,Imageid)):
             return -1#数据库已有收藏的话 略过
         else:
+            UserTag=SQLOS.GetUserTagDic(Userid) #从数据库拖数据下来
+    #        print(111)
+            TagDict=SQLOS.GetTagDict() #从数据库拖dict下来
+     #       print(222)
+
             spider=ScrapyForPicTagsClass()
-            pictag=spider.GetTagList(Imageid) #爬取图片tag 
+            pictag=spider.GetTagList(Imageid) #爬取图片tag
+    #        print(333)
+            addtaglist=MYF.DictDif1(TagDict,pictag)#有哪些tag是没有的 组成一个list
+    #        print(444)
+            newdict=MYF.FullfillTag(TagDict,addtaglist)#更新本地tagdict为完整的tag（dict形式
+    #        print(555)
+            updatedict=MYF.DictDif2(TagDict,newdict) #需要补充进taglist的tag（dict形式）
+    #        print(666)
+          #  print(UserTag)
+            newsert=MYF.AddUserTag(UserTag,pictag,newdict)#更新本地用户的tagdict
+     #       print(777)
             SQLOS.UpdateOneStarImage(Userid,Imageid) #更新数据库用户收藏列表
-            SQLOS.UpdateUsertag(Userid,pictag) #更新数据库用户tag分析列表 传入UserID和他新收藏的这张图片的tags
+      #      print(888)
+            SQLOS.UpdateTaglist(updatedict) #更新数据库Tag列表
+       #     print(999)
+            SQLOS.UpdateUsertag(Userid,newsert) #更新数据库用户tag分析列表
             SQLOS.WritetoLog(Userid,4,("添加收藏: %s"%Imageid))
+
             return 1 #向数据库中添加一条收藏记录，并更新tag_list与user_tag
 
             
@@ -198,7 +198,6 @@ class SQLOS():
                 return 1
              except:
                 db.rollback()
-                print(333)
                 return 0
         else:
             return -1#更改制定ID的用户账户信息，成功返回1，失败返回0，未找到ID返回-1
@@ -250,6 +249,15 @@ class SQLOS():
         for onedate in DataFromSQL:
             TagDict[onedate['TagName']]=onedate['TagID']
         return TagDict#得到数据库储存Tag列表，返回一个dict 键值为tag
+    def GetTagDict_rev():
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        cursor.execute("SELECT * from d_tag_list")
+        DataFromSQL=cursor.fetchall()
+        TagDict={}
+        for onedate in DataFromSQL:
+            TagDict[onedate['TagID']]=onedate['TagName']
+        return TagDict
 
     def ChangeUserPixiv(ID,pixivID,pixivpw):
         User=SQLOS.GetUserAccount(ID)
@@ -284,9 +292,26 @@ class SQLOS():
         User['Usermode']=not User['Usermode']
         SQLOS.EditUserAccount(ID,User) #更改用户模式
         SQLOS.WritetoLog(ID,2,("修改账户类型为 %s"% (not User['Usermode'])))#更改账户类型，并向日志中写入一条记录
+
+    def GetMostTag(UserID):
+        usertag=SQLOS.GetUserTagDic(UserID)
+        taglist=SQLOS.GetTagDict_rev()
+        #print (taglist)
+        newtagcount ={}
+        for tagid,count in usertag.items():
+            #print(tagid,count)
+            
+            newtagcount[taglist[tagid]]=count
+        result=sorted(newtagcount.items(),key=lambda x:x[1],reverse=True)
+        db=SQLOS.Connect_to_DB()
+        cursor=db.cursor()
+        for tagname,count in result:
+            if(count>1):
+                cursor.execute("INSERT INTO d_tag_star (`Tagname`,`count`)VALUE (%s,%s)",(tagname,count))
+        db.commit()
+        db.close()
+
     
 
           
    
-
-
