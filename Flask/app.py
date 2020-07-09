@@ -1,5 +1,6 @@
 #使用模板，为了将数据以html文档的格式展示出来
 
+
 import sys
 sys.path.append('..')
 from MyScrapyProject.MyScrapyProject.MysqlRW import *
@@ -14,8 +15,12 @@ app = Flask(__name__) #创建一个swgi应用
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=5)
 Moment(app)
 
-#设置一个数据库链接
 
+app = Flask(__name__) #创建一个swgi应用
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=5)
+Moment(app)
+
+#设置一个数据库链接
 def get_conn():
     connection = pymysql.connect(host='rm-bp10wr08s7nl319dcyo.mysql.rds.aliyuncs.com',
                         user='pixiv_rec_staff',
@@ -68,8 +73,6 @@ def list():
 def recommend():
     return render_template('recommend.html')
 
-
-
 #检查登录信息是否正确
 #无此账户进入AccountNotFound.html(未写)
 #密码错误进入PswdIsIncorrect.html(未写)
@@ -109,5 +112,19 @@ def submittRegister(name,pswd):
 def time():
     return render_template('user/time.html')
 
+@app.route('/personinfoedit')
+def perinfoedit():
+    return render_template('personal_infoedit.html')
+
+@app.route('/idedit')
+def id_edit():
+    return render_template('id_edit.html')
+    
+@app.route('/status1')
+def status1():
+    return render_template('status1.html')
+
 if __name__=='__main__':
     app.run(port = 19990, debug = True)
+
+    
