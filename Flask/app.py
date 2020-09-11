@@ -7,8 +7,8 @@ path.append('..')
 path.append(os.path.abspath(os.path.dirname(__file__)).split('MyScrapyProject')[0])
 
 print(path)
-from MyScrapyProject.spiders.StarSpider import ScrapyForUserStarClass
-from MyScrapyProject.MysqlRW import *
+from MyScrapyProject.MyScrapyProject.spiders.StarSpider import ScrapyForUserStarClass
+from MyScrapyProject.MyScrapyProject.MysqlRW import *
 from flask_moment import Moment
 from flask import Flask,Response
 from flask import render_template
